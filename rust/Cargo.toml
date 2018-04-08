@@ -1,0 +1,10 @@
+[package]
+name = "discord_extension"
+version = "0.1.0"
+authors = ["Dreae <dreae@dreae.onl>"]
+
+[lib]
+crate-type = ["staticlib"]
+
+[dependencies]
+serenity = "0.5.1"
