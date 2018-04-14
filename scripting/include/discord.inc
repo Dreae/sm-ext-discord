@@ -7,6 +7,8 @@
 
 methodmap DiscordMessage < Handle {
     public native void GetContent(char[] buffer, int buflen);
+
+    public native void ReplyToChannel(char[] content);
 }
 
 typedef DiscordMessageCallback = function void (DiscordMessage msg);

@@ -3,7 +3,8 @@ use std::ffi::CString;
 
 #[repr(C)]
 pub struct DiscordMessage {
-    pub content: *mut c_char
+    pub content: *mut c_char,
+    pub channel_id: u64
 }
 
 

@@ -1,5 +1,5 @@
 #include <sourcemod>
-#include "include/discord.inc"
+#include <discord.inc>
 
 public Plugin myinfo = {
     name = "Discord Test",
@@ -10,18 +10,21 @@ public Plugin myinfo = {
 }
 
 ConVar g_hCvarBotToken;
-char g_sDiscordToken[128];
+char g_sDiscordToken[256];
+bool g_bConnected = false;
 
 public void OnPluginStart() {
     g_hCvarBotToken = CreateConVar("discord_bot_token", "", "Discord bot token", FCVAR_PROTECTED);
 }
 
-public OnConfigsExecuted() {
+public void OnConfigsExecuted() {
     g_hCvarBotToken.GetString(g_sDiscordToken, sizeof(g_sDiscordToken));
-    if (strlen(g_sDiscordToken) != 0) {
+    PrintToServer("Got bot token %s", g_sDiscordToken);
+    if (strlen(g_sDiscordToken) != 0 && !g_bConnected) {
         DiscordClient client = new DiscordClient();
         client.SetMessageCallback(On_DiscordMessage);
         client.Connect(g_sDiscordToken);
+        g_bConnected = true;
     }
 }
 

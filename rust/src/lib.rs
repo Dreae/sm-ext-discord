@@ -13,6 +13,7 @@ mod glue;
 use handler::Handler;
 
 use serenity::prelude::*;
+use serenity::model::id::ChannelId;
 
 pub use model::free_discord_message;
 
@@ -33,21 +34,38 @@ pub extern "C" fn handler_set_msg_callback(handler: *mut c_void, callback: *mut 
 pub extern "C" fn connect_handler(handler: *mut c_void, token: *const c_char) {
     unsafe {
         let c_str = CStr::from_ptr(token);
-        let token_str = c_str.to_owned();
-        let token = token_str.to_str().unwrap();
+        match c_str.to_str() {
+            Ok(token) => {
+                let handler = *Box::from_raw(handler as *mut Handler);
 
-        let handler = *Box::from_raw(handler as *mut Handler);
-
-        match Client::new(token, handler) {
-            Ok(mut client) => {
-                thread::spawn(move || {
-                    if let Err(err) = client.start() {
-                        glue::log_error(&format!("Client error: {:?}", err));
+                match Client::new(token, handler) {
+                    Ok(mut client) => {
+                        thread::spawn(move || {
+                            if let Err(err) = client.start() {
+                                glue::log_error(&format!("Client error: {:?}", err));
+                            }
+                        });
+                    },
+                    Err(err) => {
+                        glue::log_error(&format!("Connection error: {:?}", err));
                     }
-                });
+                }
             },
-            Err(err) => {
-                glue::log_error(&format!("Connection error: {:?}", err));
+            _ => {
+                glue::log_error("Invalid bot token provided");
+            }
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn say_to_channel(channel_id: u64, msg: *const c_char) {
+    unsafe {
+        let c_str = CStr::from_ptr(msg);
+        if let Ok(msg) = c_str.to_str() {
+            let channel_id = ChannelId(channel_id);
+            if let Err(err) = channel_id.say(msg) {
+                glue::log_error(&format!("There was an error sending message: {:?}", err));
             }
         }
     }

@@ -2,18 +2,6 @@
 #include "handletypes.hpp"
 #include "include/rust.h"
 
-#define READ_HANDLE(pContext, params) \
-  Handle_t hndl = static_cast<Handle_t>(params[1]); \
-  HandleSecurity sec; \
-  DiscordMessage *obj; \
-  sec.pOwner = pContext->GetIdentity(); \
-  sec.pIdentity = myself->GetIdentity(); \
-  auto herr = handlesys->ReadHandle(hndl, g_MessageType, &sec, reinterpret_cast<void **>(&obj)); \
-  if (herr != HandleError_None) { \
-    pContext->ReportError("Invalid Client handle %x (error %d)", hndl, herr); \
-    return 0; \
-  }
-
 
 HandleType_t g_MessageType;
 extern const sp_nativeinfo_t discord_message_natives[];
@@ -49,14 +37,25 @@ public:
 DiscordMessageNatives messageNatives;
 
 static cell_t native_GetMessageContent(IPluginContext *pContext, const cell_t *params) {
-    READ_HANDLE(pContext, params);
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
 
-    pContext->StringToLocal(params[2], params[3], obj->content);
+    pContext->StringToLocal(params[2], params[3], msg->content);
+
+    return 1;
+}
+
+static cell_t native_ReplyToChannel(IPluginContext *pContext, const cell_t *params) {
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+
+    char *msg_content;
+    pContext->LocalToString(params[2], &msg_content);
+    say_to_channel(msg->channel_id, msg_content);
 
     return 1;
 }
 
 const sp_nativeinfo_t discord_message_natives[] = {
     {"DiscordMessage.GetContent", native_GetMessageContent},
+    {"DiscordMessage.ReplyToChannel", native_ReplyToChannel},
     {NULL, NULL}
 };
