@@ -17,8 +17,8 @@ use serenity::prelude::*;
 pub use model::free_discord_message;
 
 #[no_mangle]
-pub extern "C" fn create_handler() -> *mut c_void {
-    Box::into_raw(Box::new(Handler::new())) as *mut c_void
+pub extern "C" fn create_handler(plugin: *const c_void) -> *mut c_void {
+    Box::into_raw(Box::new(Handler::new(plugin as usize))) as *mut c_void
 }
 
 #[no_mangle]
@@ -38,10 +38,17 @@ pub extern "C" fn connect_handler(handler: *mut c_void, token: *const c_char) {
 
         let handler = *Box::from_raw(handler as *mut Handler);
 
-        let mut client = Client::new(token, handler).unwrap();
-
-        thread::spawn(move || {
-            client.start().unwrap();
-        });
+        match Client::new(token, handler) {
+            Ok(mut client) => {
+                thread::spawn(move || {
+                    if let Err(err) = client.start() {
+                        glue::log_error(&format!("Client error: {:?}", err));
+                    }
+                });
+            },
+            Err(err) => {
+                glue::log_error(&format!("Connection error: {:?}", err));
+            }
+        }
     }
 }

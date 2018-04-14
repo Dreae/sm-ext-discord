@@ -7,7 +7,8 @@ class DiscordClient {
 private:
     void *handler;
 public:
-    DiscordClient();
+    DiscordClient(IdentityToken_t *plugin);
+    void *GetHandler();
     void SetMessageCallback(IPluginFunction *callback);
     void Connect(char *token);
 };

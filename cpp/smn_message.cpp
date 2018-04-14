@@ -27,10 +27,8 @@ public:
         handlesys->InitAccessDefaults(&tacc, &hacc);
         tacc.ident = myself->GetIdentity();
         hacc.access[HandleAccess_Read] = HANDLE_RESTRICT_OWNER;
-        tacc.access[HTypeAccess_Create] = false;
-        tacc.access[HTypeAccess_Inherit] = false;
 
-        g_ClientType = handlesys->CreateType("DiscordMessage", this, 0, &tacc, &hacc, myself->GetIdentity(), NULL);
+        g_MessageType = handlesys->CreateType("DiscordMessage", this, 0, &tacc, &hacc, myself->GetIdentity(), NULL);
         sharesys->AddNatives(myself, discord_message_natives);
     }
 
@@ -38,15 +36,17 @@ public:
         handlesys->RemoveType(g_ClientType, myself->GetIdentity());
     }
 
-    void OnHandleDestory(HandleType_t type, void *object) {
-        free_discord_message(reinterpret_cast<DiscordMessage *>(object));
+    void OnHandleDestroy(HandleType_t type, void *object) {
+        return;
     }
 
     // Not even going to try to estimate the size of the underlying Rust object
-    bool GetHandleApproxSize(HandleType_t, void* object, unsigned int *pSize) {
+    bool GetHandleApproxSize(HandleType_t type, void* object, unsigned int *pSize) {
         return false;
     }
 };
+
+DiscordMessageNatives messageNatives;
 
 static cell_t native_GetMessageContent(IPluginContext *pContext, const cell_t *params) {
     READ_HANDLE(pContext, params);

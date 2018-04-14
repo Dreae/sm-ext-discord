@@ -39,8 +39,8 @@ public:
         handlesys->RemoveType(g_ClientType, myself->GetIdentity());
     }
 
-    void OnHandleDestory(HandleType_t type, void *object) {
-        // TODO: Return to Rust for collection
+    void OnHandleDestroy(HandleType_t type, void *object) {
+        return;
     }
 
     // Not even going to try to estimate the size of the underlying Rust object
@@ -49,8 +49,10 @@ public:
     }
 };
 
+ClientNatives clientNatives;
+
 static cell_t native_CreateClient(IPluginContext *pContext, const cell_t *params) {
-    auto client = new DiscordClient();
+    auto client = new DiscordClient(pContext->GetIdentity());
     auto hndl = handlesys->CreateHandle(g_ClientType, client, pContext->GetIdentity(), myself->GetIdentity(), NULL);
 
     return hndl;
@@ -64,7 +66,7 @@ static cell_t native_SetMessageCallback(IPluginContext *pContext, const cell_t *
         pContext->ReportError("Invalid message callback");
     }
 
-    handler_set_msg_callback(obj, callback);
+    handler_set_msg_callback(obj->GetHandler(), callback);
 
     return 0;
 }
@@ -75,7 +77,7 @@ static cell_t native_ClientConnect(IPluginContext *pContext, const cell_t *param
     char *token;
     pContext->LocalToString(params[2], &token);
 
-    connect_handler(obj, token);
+    connect_handler(obj->GetHandler(), token);
 
     handlesys->FreeHandle(hndl, &sec);
 
