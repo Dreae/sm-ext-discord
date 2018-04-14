@@ -13,7 +13,7 @@
 #define SMEXT_CONF_VERSION		"0.0.1"
 #define SMEXT_CONF_AUTHOR		"Dreae"
 #define SMEXT_CONF_URL			"https://github.com/dreae/sm-ext-discord"
-#define SMEXT_CONF_LOGTAG		"Dscord"
+#define SMEXT_CONF_LOGTAG		"Discord"
 #define SMEXT_CONF_LICENSE		"MIT"
 #define SMEXT_CONF_DATESTRING	__DATE__
 

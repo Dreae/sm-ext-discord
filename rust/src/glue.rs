@@ -9,8 +9,16 @@ pub fn call_message_callback(callback: usize, plugin: usize, msg: &DiscordMessag
 }
 
 pub fn log_error(msg: &str) {
+    let msg = CString::new(msg).unwrap();
     unsafe {
-        c::log_error(CString::new(msg).unwrap().as_ptr());
+        c::log_error(msg.as_ptr());
+    }
+}
+
+pub fn log_message(msg: &str) {
+    let msg = CString::new(msg).unwrap();
+    unsafe {
+        c::log_message(msg.as_ptr());
     }
 }
 
@@ -21,5 +29,6 @@ mod c {
     extern "C" {
         pub fn call_message_callback(callback: *const c_void, plugin: *const c_void, msg: *const DiscordMessage);
         pub fn log_error(msg: *const c_char);
+        pub fn log_message(msg: *const c_char);
     }
 }

@@ -1,10 +1,10 @@
 #include "DiscordClient.hpp"
 #include "include/rust.h"
 
-DiscordClient::DiscordClient(IdentityToken_t *plugin) {
-    this->handler = create_handler(plugin);
+DiscordClient::DiscordClient(IdentityToken_t *plugin, char *token) {
+    this->client = create_client(plugin, token);
 }
 
-void *DiscordClient::GetHandler() {
-    return this->handler;
+void *DiscordClient::GetClient() {
+    return this->client;
 }

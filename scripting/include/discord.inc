@@ -14,11 +14,11 @@ methodmap DiscordMessage < Handle {
 typedef DiscordMessageCallback = function void (DiscordMessage msg);
 
 methodmap DiscordClient < Handle {
-    public native DiscordClient();
+    public native DiscordClient(const char[] token);
 
     public native void SetMessageCallback(DiscordMessageCallback cb);
 
-    public native void Connect(const char[] token);
+    public native void Connect();
 }
 
 public Extension:__ext_smdiscord = {

@@ -21,3 +21,7 @@ void call_message_callback(void *callback, IdentityToken_t *plugin, DiscordMessa
 void log_error(char *msg) {
     smutils->LogError(myself, msg);
 }
+
+void log_message(char *msg) {
+    smutils->LogMessage(myself, msg);
+}

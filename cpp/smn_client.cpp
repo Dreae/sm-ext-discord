@@ -27,6 +27,7 @@ public:
     }
 
     void OnHandleDestroy(HandleType_t type, void *object) {
+        // TODO: Shutdown shards
         return;
     }
 
@@ -39,7 +40,10 @@ public:
 ClientNatives clientNatives;
 
 static cell_t native_CreateClient(IPluginContext *pContext, const cell_t *params) {
-    auto client = new DiscordClient(pContext->GetIdentity());
+    char *token;
+    pContext->LocalToString(params[1], &token);
+
+    auto client = new DiscordClient(pContext->GetIdentity(), token);
     auto hndl = handlesys->CreateHandle(g_ClientType, client, pContext->GetIdentity(), myself->GetIdentity(), NULL);
 
     return hndl;
@@ -53,32 +57,15 @@ static cell_t native_SetMessageCallback(IPluginContext *pContext, const cell_t *
         pContext->ReportError("Invalid message callback");
     }
 
-    handler_set_msg_callback(client->GetHandler(), callback);
+    client_set_msg_callback(client->GetClient(), callback);
 
     return 0;
 }
 
 static cell_t native_ClientConnect(IPluginContext *pContext, const cell_t *params) {
-    Handle_t hndl = static_cast<Handle_t>(params[1]);
+    DiscordClient *client = ReadHandle<DiscordClient>(pContext, params, g_ClientType);
 
-    HandleSecurity sec;
-    DiscordClient *client;
-
-    sec.pOwner = pContext->GetIdentity();
-    sec.pIdentity = myself->GetIdentity();
-    auto herr = handlesys->ReadHandle(hndl, g_ClientType, &sec, reinterpret_cast<void **>(&client));
-
-    if (herr != HandleError_None) {
-        pContext->ReportError("Invalid Client handle %x (error %d)", hndl, herr);
-        return 0;
-    }
-
-    char *token;
-    pContext->LocalToString(params[2], &token);
-
-    connect_handler(client->GetHandler(), token);
-
-    handlesys->FreeHandle(hndl, &sec);
+    connect_client(client->GetClient());
 
     return 1;
 }

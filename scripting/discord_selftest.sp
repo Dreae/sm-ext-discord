@@ -21,9 +21,9 @@ public void OnConfigsExecuted() {
     g_hCvarBotToken.GetString(g_sDiscordToken, sizeof(g_sDiscordToken));
     PrintToServer("Got bot token %s", g_sDiscordToken);
     if (strlen(g_sDiscordToken) != 0 && !g_bConnected) {
-        DiscordClient client = new DiscordClient();
+        DiscordClient client = new DiscordClient(g_sDiscordToken);
         client.SetMessageCallback(On_DiscordMessage);
-        client.Connect(g_sDiscordToken);
+        client.Connect();
         g_bConnected = true;
     }
 }

@@ -1,60 +1,54 @@
-#![feature(ptr_internals)]
 extern crate serenity;
+extern crate typemap;
 
 use std::os::raw::{c_void, c_char};
 
 use std::ffi::CStr;
-use std::thread;
 
 mod handler;
 mod model;
 mod glue;
+mod client;
 
 use handler::Handler;
+use client::DiscordClient;
 
-use serenity::prelude::*;
 use serenity::model::id::ChannelId;
 
 pub use model::free_discord_message;
 
 #[no_mangle]
-pub extern "C" fn create_handler(plugin: *const c_void) -> *mut c_void {
-    Box::into_raw(Box::new(Handler::new(plugin as usize))) as *mut c_void
+pub extern "C" fn create_client(plugin: *const c_void, token: *const c_char) -> *mut c_void {
+    let handler = Handler::new(plugin as usize);
+    let c_str = unsafe { CStr::from_ptr(token).to_owned() };
+     match c_str.to_str() {
+        Ok(token) => {
+            if let Some(client) = DiscordClient::new(token, handler) {
+                Box::into_raw(Box::new(client)) as *mut c_void
+            } else {
+                std::ptr::null_mut()
+            }
+        },
+        _ => {
+            glue::log_error("Invalid discord token provided");
+            std::ptr::null_mut()
+        }
+     }
 }
 
 #[no_mangle]
-pub extern "C" fn handler_set_msg_callback(handler: *mut c_void, callback: *mut c_void) {
+pub extern "C" fn client_set_msg_callback(client: *mut c_void, callback: *mut c_void) {
     unsafe {
-        let handler = &mut *(handler as *mut Handler);
-        handler.set_callback(callback);
+        let client = &mut *(client as *mut DiscordClient);
+        client.set_message_callback(callback as usize);
     }
 }
 
 #[no_mangle]
-pub extern "C" fn connect_handler(handler: *mut c_void, token: *const c_char) {
+pub extern "C" fn connect_client(client: *mut c_void) {
     unsafe {
-        let c_str = CStr::from_ptr(token);
-        match c_str.to_str() {
-            Ok(token) => {
-                let handler = *Box::from_raw(handler as *mut Handler);
-
-                match Client::new(token, handler) {
-                    Ok(mut client) => {
-                        thread::spawn(move || {
-                            if let Err(err) = client.start() {
-                                glue::log_error(&format!("Client error: {:?}", err));
-                            }
-                        });
-                    },
-                    Err(err) => {
-                        glue::log_error(&format!("Connection error: {:?}", err));
-                    }
-                }
-            },
-            _ => {
-                glue::log_error("Invalid bot token provided");
-            }
-        }
+        let client = &mut *(client as *mut DiscordClient);
+        client.start();
     }
 }
 

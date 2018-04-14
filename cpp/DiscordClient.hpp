@@ -5,10 +5,10 @@
 class DiscordClient {
     friend class ClientNatives;
 private:
-    void *handler;
+    void *client;
 public:
-    DiscordClient(IdentityToken_t *plugin);
-    void *GetHandler();
+    DiscordClient(IdentityToken_t *plugin, char *token);
+    void *GetClient();
     void SetMessageCallback(IPluginFunction *callback);
-    void Connect(char *token);
+    void Connect();
 };
