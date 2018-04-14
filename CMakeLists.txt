@@ -6,6 +6,7 @@ set(SOURCE_FILES
     cpp/DiscordClient.cpp
     cpp/smn_client.cpp
     cpp/smn_message.cpp
+    cpp/smn_ready.cpp
     cpp/include/smsdk_ext.cpp
     cpp/glue.cpp
 )

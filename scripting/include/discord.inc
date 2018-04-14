@@ -9,14 +9,27 @@ methodmap DiscordMessage < Handle {
     public native void GetContent(char[] buffer, int buflen);
 
     public native void ReplyToChannel(char[] content);
+
+    public native bool IsBot();
+
+    public native void AuthorId(int id[2]);
+
+    public native void ChannelId(int id[2]);
+}
+
+methodmap DiscordReady < Handle {
+    public native void CurrentUserId(int id[2]);
 }
 
 typedef DiscordMessageCallback = function void (DiscordMessage msg);
+typedef DiscordReadyCallback = function void (DiscordReady ready);
 
 methodmap DiscordClient < Handle {
     public native DiscordClient(const char[] token);
 
     public native void SetMessageCallback(DiscordMessageCallback cb);
+
+    public native void SetReadyCallback(DiscordReadyCallback cb);
 
     public native void Connect();
 }

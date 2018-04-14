@@ -59,7 +59,20 @@ static cell_t native_SetMessageCallback(IPluginContext *pContext, const cell_t *
 
     client_set_msg_callback(client->GetClient(), callback);
 
-    return 0;
+    return 1;
+}
+
+static cell_t native_SetReadyCallback(IPluginContext *pContext, const cell_t *params) {
+    DiscordClient *client = ReadHandle<DiscordClient>(pContext, params, g_ClientType);
+
+    auto callback = pContext->GetFunctionById((funcid_t)params[2]);
+    if (!callback) {
+        pContext->ReportError("Invalid ready callback");
+    }
+
+    client_set_ready_callback(client->GetClient(), callback);
+
+    return 1;
 }
 
 static cell_t native_ClientConnect(IPluginContext *pContext, const cell_t *params) {
@@ -73,6 +86,7 @@ static cell_t native_ClientConnect(IPluginContext *pContext, const cell_t *param
 const sp_nativeinfo_t discord_client_natives[] = {
     {"DiscordClient.DiscordClient", native_CreateClient},
     {"DiscordClient.SetMessageCallback", native_SetMessageCallback},
+    {"DiscordClient.SetReadyCallback", native_SetReadyCallback},
     {"DiscordClient.Connect", native_ClientConnect},
     {NULL, NULL}
 };

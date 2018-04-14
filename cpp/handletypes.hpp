@@ -4,3 +4,4 @@
 
 extern HandleType_t g_ClientType;
 extern HandleType_t g_MessageType;
+extern HandleType_t g_ReadyType;

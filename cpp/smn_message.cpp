@@ -21,7 +21,7 @@ public:
     }
 
     void OnExtUnload() {
-        handlesys->RemoveType(g_ClientType, myself->GetIdentity());
+        handlesys->RemoveType(g_MessageType, myself->GetIdentity());
     }
 
     void OnHandleDestroy(HandleType_t type, void *object) {
@@ -54,8 +54,37 @@ static cell_t native_ReplyToChannel(IPluginContext *pContext, const cell_t *para
     return 1;
 }
 
+static cell_t native_IsBot(IPluginContext *pContext, const cell_t *params) {
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+
+    return msg->bot;
+}
+
+static cell_t native_AuthorId(IPluginContext *pContext, const cell_t *params) {
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+
+    cell_t *addr;
+    pContext->LocalToPhysAddr(params[2], &addr);
+    *reinterpret_cast<uint64_t *>(addr) = msg->author_id;
+
+    return 1;
+}
+
+static cell_t native_ChannelId(IPluginContext *pContext, const cell_t *params) {
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+
+    cell_t *addr;
+    pContext->LocalToPhysAddr(params[2], &addr);
+    *reinterpret_cast<uint64_t *>(addr) = msg->channel_id;
+
+    return 1;
+}
+
 const sp_nativeinfo_t discord_message_natives[] = {
     {"DiscordMessage.GetContent", native_GetMessageContent},
     {"DiscordMessage.ReplyToChannel", native_ReplyToChannel},
+    {"DiscordMessage.IsBot", native_IsBot},
+    {"DiscordMessage.AuthorId", native_AuthorId},
+    {"DiscordMessage.ChannelId", native_ChannelId},
     {NULL, NULL}
 };

@@ -1,10 +1,12 @@
-use std::os::raw::c_char;
+use std::os::raw::{c_char, c_uchar};
 use std::ffi::CString;
 
 #[repr(C)]
 pub struct DiscordMessage {
     pub content: *mut c_char,
-    pub channel_id: u64
+    pub channel_id: u64,
+    pub author_id: u64,
+    pub bot: c_uchar
 }
 
 
