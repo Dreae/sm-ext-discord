@@ -62,6 +62,10 @@ public void On_DiscordMessage(DiscordMessage msg) {
 
         embed.SetTitle("**Test Embed**");
         embed.SetDescription("[Test description](https://google.com)");
+        embed.AddField("Inline1", "Inline", true);
+        embed.AddField("Inline2", "Inline", true);
+        embed.AddField("Test", "Testing");
+
 
         newMsg.SetEmbed(embed);
 

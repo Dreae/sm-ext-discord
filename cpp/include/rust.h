@@ -35,4 +35,5 @@ extern "C" {
     NewDiscordEmbed *create_new_discord_embed();
     void set_new_embed_title(NewDiscordEmbed *new_embed, char *content);
     void set_new_embed_description(NewDiscordEmbed *new_embed, char *description);
+    void new_embed_add_field(NewDiscordEmbed *new_embed, char *title, char *value, bool_t in_line);
 }

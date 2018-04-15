@@ -98,18 +98,61 @@ methodmap DiscordClient < Handle {
 }
 
 methodmap NewDiscordEmbed < Handle {
+    /**
+     * Creates a new embed object to represent the embed included
+     * on a new Discord message
+     *
+     * @return the newly created embed
+     */
     public native NewDiscordEmbed();
 
+    /**
+     * Sets the title for this embed object
+     *
+     * @param title         The title of this embed
+     */
     public native void SetTitle(const char[] title);
 
+    /**
+     * Sets the description for this embed object
+     *
+     * @param description   The title of this embed
+     */
     public native void SetDescription(const char[] description);
+
+    /**
+     * Adds a field to this embed object
+     *
+     * @param title         The title of the new field
+     * @param value         The value for the new field
+     * @param inline        Should the new field be displayed inline
+     */
+    public native void AddField(const char[] title, const char[] value, bool inline = false);
 }
 
 methodmap NewDiscordMessage < Handle {
+    /**
+     *
+     * Creates a new message for use with SendToChannel
+     *
+     * @return              The newly created message
+     */
     public native NewDiscordMessage();
 
+    /**
+     * Sets the message content for this message
+     *
+     * @param content       The content to send to Discord
+     */
     public native void SetContent(const char[] content);
 
+    /**
+     * Sets the embed to be included with this message
+     * @note This frees the handle for embed, do not attempt
+     *       to use the embed after calling this method
+     *
+     * @param embed         The embeds to include in this message
+     */
     public native void SetEmbed(NewDiscordEmbed embed);
 }
 
@@ -129,6 +172,14 @@ native void UInt64ToString(int u64[2], char buffer[20]);
  */
 native void StringToUint64(const char[] buffer, int u64[2]);
 
+/**
+ * Sends a rich message to the specified ChannelId
+ * @note This closes the handle for message, do not attempt
+ *       to reuse the NewDiscordMessage after calling SendToChannel
+ *
+ * @param channel_id        The ChannelId to send this message to
+ * @param message           The message to send to the channel
+ */
 native void SendToChannel(int channel_id[2], NewDiscordMessage message);
 
 public Extension:__ext_smdiscord = {

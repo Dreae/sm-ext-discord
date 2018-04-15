@@ -65,7 +65,7 @@ impl SendableDiscordMessage {
 
 pub mod c {
     use super::*;
-    use std::os::raw::c_char;
+    use std::os::raw::{c_char, c_uchar};
     use std::ffi::CStr;
 
     use serenity::model::id::ChannelId;
@@ -119,5 +119,19 @@ pub mod c {
         let description = c_str.into_string().unwrap_or_default();
 
         new_embed.description = Some(description);
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_embed_add_field(new_embed: *mut SendableDiscordEmbed, title: *const c_char, value: *const c_char, inline: c_uchar) {
+        let new_embed = unsafe { &mut *new_embed };
+        let c_str = unsafe { CStr::from_ptr(title).to_owned() };
+        let title = c_str.into_string().unwrap_or_default();
+
+        let c_str = unsafe { CStr::from_ptr(value).to_owned() };
+        let value = c_str.into_string().unwrap_or_default();
+
+        let inline = if inline == 1 { true } else { false };
+
+        new_embed.fields.insert(title, (value, inline));
     }
 }

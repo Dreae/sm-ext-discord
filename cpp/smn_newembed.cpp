@@ -63,10 +63,21 @@ static cell_t native_SetNewEmbedDescription(IPluginContext *pContext, const cell
     return 1;
 }
 
+static cell_t native_NewEmbedAddField(IPluginContext *pContext, const cell_t *params) {
+    auto new_embed = ReadHandle<NewDiscordEmbed>(pContext, params[1], g_NewEmbedType);
+
+    char *title;
+    char *value;
+    pContext->LocalToString(params[2], &title);
+    pContext->LocalToString(params[3], &value);
+
+    new_embed_add_field(new_embed, title, value, params[4]);
+}
 
 const sp_nativeinfo_t newembed_natives[] = {
     {"NewDiscordEmbed.NewDiscordEmbed", native_CreateNewDiscordEmbed},
     {"NewDiscordEmbed.SetTitle", native_SetNewEmbedTitle},
     {"NewDiscordEmbed.SetDescription", native_SetNewEmbedDescription},
+    {"NewDiscordEmbed.AddField", native_NewEmbedAddField},
     {NULL, NULL}
 };
