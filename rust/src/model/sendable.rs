@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use serenity::model::id::ChannelId;
 
 #[derive(Default)]
@@ -12,7 +10,7 @@ pub struct SendableDiscordMessage {
 pub struct SendableDiscordEmbed {
     pub description: Option<String>,
     pub title: Option<String>,
-    pub fields: HashMap<String, (String, bool)>,
+    pub fields: Vec<(String, String, bool)>,
     pub color: Option<(u8, u8, u8)>,
     pub footer: Option<String>
 }
@@ -44,8 +42,8 @@ impl SendableDiscordMessage {
                         e = e.title(title);
                     }
 
-                    for (k, v) in embed.fields.into_iter() {
-                        e = e.field(k, v.0, v.1);
+                    for (title, value, inline) in embed.fields.into_iter() {
+                        e = e.field(title, value, inline);
                     }
 
                     if let Some(footer) = embed.footer {
@@ -132,6 +130,6 @@ pub mod c {
 
         let inline = if inline == 1 { true } else { false };
 
-        new_embed.fields.insert(title, (value, inline));
+        new_embed.fields.push((title, value, inline));
     }
 }
