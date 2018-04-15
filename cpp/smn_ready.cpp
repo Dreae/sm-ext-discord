@@ -37,7 +37,7 @@ public:
 DiscordReadyNatives readyNatives;
 
 static cell_t native_CurrentUserId(IPluginContext *pContext, const cell_t *params) {
-    DiscordReady *ready = ReadHandle<DiscordReady>(pContext, params, g_ReadyType);
+    DiscordReady *ready = ReadHandle<DiscordReady>(pContext, params[1], g_ReadyType);
 
     cell_t *addr;
     pContext->LocalToPhysAddr(params[2], &addr);

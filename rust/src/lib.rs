@@ -1,3 +1,5 @@
+#![feature(conservative_impl_trait)]
+
 extern crate serenity;
 extern crate typemap;
 
@@ -13,8 +15,7 @@ mod client;
 
 use serenity::model::id::ChannelId;
 
-pub use model::{free_discord_message, free_discord_ready};
-
+pub use model::c::*;
 pub use client::c::*;
 
 #[no_mangle]

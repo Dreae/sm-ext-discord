@@ -47,5 +47,24 @@ public void On_DiscordMessage(DiscordMessage msg) {
     msg.AuthorId(authorId);
     UInt64ToString(authorId, sAuthorId);
 
-    PrintToServer("Got message from %s:  %s", sAuthorId, content);
+    PrintToServer("Got message from %s (%d) (%d):  %s", sAuthorId, msg.IsSelf(), msg.IsBot(), content);
+
+    if (StrEqual("smtest", content)) {
+        msg.ReplyToChannel("**test** *test* [test](https://google.com)");
+    }
+
+    if (StrEqual("embedtest", content)) {
+        int channelId[2];
+        msg.ChannelId(channelId);
+
+        NewDiscordMessage newMsg = new NewDiscordMessage();
+        NewDiscordEmbed embed = new NewDiscordEmbed();
+
+        embed.SetTitle("**Test Embed**");
+        embed.SetDescription("[Test description](https://google.com)");
+
+        newMsg.SetEmbed(embed);
+
+        SendToChannel(channelId, newMsg);
+    }
 }

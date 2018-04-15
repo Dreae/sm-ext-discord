@@ -5,10 +5,10 @@
 class DiscordClient {
     friend class ClientNatives;
 private:
-    void *client;
+    RustDiscordClient *client;
 public:
     DiscordClient(IdentityToken_t *plugin, char *token);
-    void *GetClient();
+    RustDiscordClient *GetClient();
     void SetMessageCallback(IPluginFunction *callback);
     void Connect();
 };

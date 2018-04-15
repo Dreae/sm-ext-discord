@@ -3,6 +3,10 @@
 typedef unsigned long long int u64_t;
 typedef unsigned char bool_t;
 
+typedef void RustDiscordClient;
+typedef void NewDiscordMessage;
+typedef void NewDiscordEmbed;
+
 extern "C" {
     typedef struct {
         char *content;
@@ -16,10 +20,19 @@ extern "C" {
         u64_t user_id;
     } DiscordReady;
 
-    void *create_client(void *plugin, char *token);
-    void client_set_msg_callback(void *client, void *callback);
-    void client_set_ready_callback(void *client, void *callback);
-    void connect_client(void *client);
+    RustDiscordClient *create_client(void *plugin, char *token);
+    void client_set_msg_callback(RustDiscordClient *client, void *callback);
+    void client_set_ready_callback(RustDiscordClient *client, void *callback);
+    void connect_client(RustDiscordClient *client);
 
     void say_to_channel(u64_t channel_id, char *content);
+
+    NewDiscordMessage *create_new_discord_message();
+    void set_new_message_content(NewDiscordMessage *new_message, char *content);
+    void set_new_message_embed(NewDiscordMessage *new_message, NewDiscordEmbed *embed);
+    void send_new_discord_message(u64_t channel_id, NewDiscordMessage *new_message);
+
+    NewDiscordEmbed *create_new_discord_embed();
+    void set_new_embed_title(NewDiscordEmbed *new_embed, char *content);
+    void set_new_embed_description(NewDiscordEmbed *new_embed, char *description);
 }

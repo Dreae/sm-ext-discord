@@ -7,8 +7,8 @@
   smutils->LogMessage(myself, format, ##__VA_ARGS__);
 
 template <typename T>
-inline T *ReadHandle(IPluginContext *pContext, const cell_t *params, HandleType_t handleType) {
-    Handle_t hndl = static_cast<Handle_t>(params[1]);
+inline T *ReadHandle(IPluginContext *pContext, const cell_t handle, HandleType_t handleType) {
+    Handle_t hndl = static_cast<Handle_t>(handle);
 
     HandleSecurity sec;
     T *obj;

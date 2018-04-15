@@ -50,7 +50,7 @@ static cell_t native_CreateClient(IPluginContext *pContext, const cell_t *params
 }
 
 static cell_t native_SetMessageCallback(IPluginContext *pContext, const cell_t *params) {
-    DiscordClient *client = ReadHandle<DiscordClient>(pContext, params, g_ClientType);
+    DiscordClient *client = ReadHandle<DiscordClient>(pContext, params[1], g_ClientType);
 
     auto callback = pContext->GetFunctionById((funcid_t)params[2]);
     if (!callback) {
@@ -63,7 +63,7 @@ static cell_t native_SetMessageCallback(IPluginContext *pContext, const cell_t *
 }
 
 static cell_t native_SetReadyCallback(IPluginContext *pContext, const cell_t *params) {
-    DiscordClient *client = ReadHandle<DiscordClient>(pContext, params, g_ClientType);
+    DiscordClient *client = ReadHandle<DiscordClient>(pContext, params[1], g_ClientType);
 
     auto callback = pContext->GetFunctionById((funcid_t)params[2]);
     if (!callback) {
@@ -76,7 +76,7 @@ static cell_t native_SetReadyCallback(IPluginContext *pContext, const cell_t *pa
 }
 
 static cell_t native_ClientConnect(IPluginContext *pContext, const cell_t *params) {
-    DiscordClient *client = ReadHandle<DiscordClient>(pContext, params, g_ClientType);
+    DiscordClient *client = ReadHandle<DiscordClient>(pContext, params[1], g_ClientType);
 
     connect_client(client->GetClient());
 

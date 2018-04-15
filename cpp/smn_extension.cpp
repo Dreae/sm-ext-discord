@@ -1,5 +1,6 @@
 #include "Extension.hpp"
 #include "include/rust.h"
+#include "handletypes.hpp"
 #include <cstdlib>
 
 extern const sp_nativeinfo_t smdiscord_natives[];
@@ -39,8 +40,30 @@ static cell_t native_StringToUInt64(IPluginContext *pContext, const cell_t *para
     return 1;
 }
 
+static cell_t native_SendToChannel(IPluginContext *pContext, const cell_t *params) {
+    auto new_message = ReadHandle<NewDiscordMessage>(pContext, params[2], g_NewMessageType);
+    if (!new_message) {
+        pContext->ReportError("Invalid message handle");
+        return 0;
+    }
+
+    cell_t *addr;
+    pContext->LocalToPhysAddr(params[1], &addr);
+    u64_t channel_id = *reinterpret_cast<u64_t *>(addr);
+
+    send_new_discord_message(channel_id, new_message);
+
+    HandleSecurity sec;
+    sec.pOwner = pContext->GetIdentity();
+    sec.pIdentity = myself->GetIdentity();
+    handlesys->FreeHandle(static_cast<Handle_t>(params[1]), &sec);
+
+    return 1;
+}
+
 const sp_nativeinfo_t smdiscord_natives[] = {
     {"UInt64ToString", native_UInt64ToString},
     {"StringToUInt64", native_StringToUInt64},
+    {"SendToChannel", native_SendToChannel},
     {NULL, NULL}
 };

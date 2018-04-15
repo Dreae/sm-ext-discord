@@ -97,6 +97,22 @@ methodmap DiscordClient < Handle {
     public native void Connect();
 }
 
+methodmap NewDiscordEmbed < Handle {
+    public native NewDiscordEmbed();
+
+    public native void SetTitle(const char[] title);
+
+    public native void SetDescription(const char[] description);
+}
+
+methodmap NewDiscordMessage < Handle {
+    public native NewDiscordMessage();
+
+    public native void SetContent(const char[] content);
+
+    public native void SetEmbed(NewDiscordEmbed embed);
+}
+
 /**
  * Converts a UInt64 to a string for easier storage
  *
@@ -112,6 +128,8 @@ native void UInt64ToString(int u64[2], char buffer[20]);
  * @param u64           The buffer to store the parsed value
  */
 native void StringToUint64(const char[] buffer, int u64[2]);
+
+native void SendToChannel(int channel_id[2], NewDiscordMessage message);
 
 public Extension:__ext_smdiscord = {
     name = "Discord",

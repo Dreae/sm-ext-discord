@@ -37,7 +37,7 @@ public:
 DiscordMessageNatives messageNatives;
 
 static cell_t native_GetMessageContent(IPluginContext *pContext, const cell_t *params) {
-    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
     pContext->StringToLocal(params[2], params[3], msg->content);
 
@@ -45,7 +45,7 @@ static cell_t native_GetMessageContent(IPluginContext *pContext, const cell_t *p
 }
 
 static cell_t native_ReplyToChannel(IPluginContext *pContext, const cell_t *params) {
-    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
     char *msg_content;
     pContext->LocalToString(params[2], &msg_content);
@@ -55,19 +55,19 @@ static cell_t native_ReplyToChannel(IPluginContext *pContext, const cell_t *para
 }
 
 static cell_t native_IsBot(IPluginContext *pContext, const cell_t *params) {
-    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
     return msg->bot;
 }
 
 static cell_t native_IsSelf(IPluginContext *pContext, const cell_t *params) {
-    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
     return msg->own;
 }
 
 static cell_t native_AuthorId(IPluginContext *pContext, const cell_t *params) {
-    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
     cell_t *addr;
     pContext->LocalToPhysAddr(params[2], &addr);
@@ -77,7 +77,7 @@ static cell_t native_AuthorId(IPluginContext *pContext, const cell_t *params) {
 }
 
 static cell_t native_ChannelId(IPluginContext *pContext, const cell_t *params) {
-    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
     cell_t *addr;
     pContext->LocalToPhysAddr(params[2], &addr);
