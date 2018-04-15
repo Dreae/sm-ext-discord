@@ -32,16 +32,20 @@ public void OnConfigsExecuted() {
 
 public void On_DiscordReady(DiscordReady ready) {
     ready.CurrentUserId(g_iBotUserId);
+    char buffer[20];
+    UInt64ToString(g_iBotUserId, buffer);
 
-    PrintToServer("Bot user is %08x%08x", g_iBotUserId[1], g_iBotUserId[0]);
+    PrintToServer("Bot user is %s", buffer);
 }
 
 public void On_DiscordMessage(DiscordMessage msg) {
     char content[256];
     int authorId[2];
+    char sAuthorId[20];
 
     msg.GetContent(content, sizeof(content));
     msg.AuthorId(authorId);
+    UInt64ToString(authorId, sAuthorId);
 
-    PrintToServer("Got message from %08x%08x:  %s", authorId[1], authorId[0], content);
+    PrintToServer("Got message from %s:  %s", sAuthorId, content);
 }

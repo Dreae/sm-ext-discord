@@ -60,6 +60,12 @@ static cell_t native_IsBot(IPluginContext *pContext, const cell_t *params) {
     return msg->bot;
 }
 
+static cell_t native_IsSelf(IPluginContext *pContext, const cell_t *params) {
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
+
+    return msg->own;
+}
+
 static cell_t native_AuthorId(IPluginContext *pContext, const cell_t *params) {
     DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params, g_MessageType);
 
@@ -84,6 +90,7 @@ const sp_nativeinfo_t discord_message_natives[] = {
     {"DiscordMessage.GetContent", native_GetMessageContent},
     {"DiscordMessage.ReplyToChannel", native_ReplyToChannel},
     {"DiscordMessage.IsBot", native_IsBot},
+    {"DiscordMessage.IsSelf", native_IsSelf},
     {"DiscordMessage.AuthorId", native_AuthorId},
     {"DiscordMessage.ChannelId", native_ChannelId},
     {NULL, NULL}

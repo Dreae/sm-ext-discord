@@ -9,6 +9,7 @@ extern "C" {
         u64_t channel_id;
         u64_t author_id;
         bool_t bot;
+        bool_t own;
     } DiscordMessage;
 
     typedef struct {

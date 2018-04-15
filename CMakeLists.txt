@@ -4,6 +4,7 @@ project(discord)
 set(SOURCE_FILES
     cpp/Extension.cpp
     cpp/DiscordClient.cpp
+    cpp/smn_extension.cpp
     cpp/smn_client.cpp
     cpp/smn_message.cpp
     cpp/smn_ready.cpp

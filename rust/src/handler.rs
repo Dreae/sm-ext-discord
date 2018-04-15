@@ -24,6 +24,7 @@ impl EventHandler for Handler {
         let data = ctx.data.lock();
         if let Some(ref callbacks) = data.get::<ClientCallbacks>() {
             if let Some(ref callback) = callbacks.msg_callback {
+                let own = if msg.is_own() { 1 } else { 0 };
                 let content = CString::new(msg.content).unwrap();
                 let ChannelId(channel_id) = msg.channel_id;
                 let UserId(author_id) = msg.author.id;
@@ -31,7 +32,8 @@ impl EventHandler for Handler {
                     content: content.into_raw(),
                     channel_id,
                     author_id,
-                    bot: if msg.author.bot { 1 } else { 0 }
+                    bot: if msg.author.bot { 1 } else { 0 },
+                    own
                 };
 
                 if let Ok(callback) = callback.lock() {
