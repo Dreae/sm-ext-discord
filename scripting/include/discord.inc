@@ -128,6 +128,20 @@ methodmap NewDiscordEmbed < Handle {
      * @param inline        Should the new field be displayed inline
      */
     public native void AddField(const char[] title, const char[] value, bool inline = false);
+
+    /**
+     * Sets the footer text for this embed object
+     *
+     * @param text          The text for the footer
+     */
+    public native void SetFooterText(const char[] text);
+
+    /**
+     * Sets the footer icon for this embed object
+     *
+     * @param icon          The icon url for the footer
+     */
+    public native void SetFooterIcon(const char[] icon);
 }
 
 methodmap NewDiscordMessage < Handle {

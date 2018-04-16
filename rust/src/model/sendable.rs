@@ -12,7 +12,7 @@ pub struct SendableDiscordEmbed {
     pub title: Option<String>,
     pub fields: Vec<(String, String, bool)>,
     pub color: Option<(u8, u8, u8)>,
-    pub footer: Option<String>
+    pub footer: Option<(Option<String>, Option<String>)>
 }
 
 impl SendableDiscordMessage {
@@ -47,7 +47,18 @@ impl SendableDiscordMessage {
                     }
 
                     if let Some(footer) = embed.footer {
-                        e = e.footer(|f| f.text(footer));
+                        e = e.footer(|f| {
+                            let mut f = f;
+                            if let Some(text) = footer.0 {
+                                f = f.text(text);
+                            }
+
+                            if let Some(url) = footer.1 {
+                                f = f.icon_url(&url);
+                            }
+
+                            f
+                        });
                     }
 
                     e
@@ -131,5 +142,37 @@ pub mod c {
         let inline = if inline == 1 { true } else { false };
 
         new_embed.fields.push((title, value, inline));
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_embed_set_color(new_embed: *mut SendableDiscordEmbed, r: c_uchar, g: c_uchar, b: c_uchar) {
+        let new_embed = unsafe { &mut *new_embed };
+        new_embed.color = Some((r, g, b));
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_embed_set_footer_text(new_embed: *mut SendableDiscordEmbed, text: *const c_char) {
+        let new_embed = unsafe { &mut *new_embed };
+        let c_str = unsafe { CStr::from_ptr(text).to_owned() };
+        let text = c_str.into_string().unwrap_or_default();
+
+        if let Some(ref mut footer) = new_embed.footer {
+            footer.0 = Some(text);
+        } else {
+            new_embed.footer = Some((Some(text), None));
+        }
+    }
+
+    #[no_mangle]
+    pub extern "C" fn new_embed_set_footer_icon(new_embed: *mut SendableDiscordEmbed, icon: *const c_char) {
+        let new_embed = unsafe { &mut *new_embed };
+        let c_str = unsafe { CStr::from_ptr(icon).to_owned() };
+        let icon = c_str.into_string().unwrap_or_default();
+
+        if let Some(ref mut footer) = new_embed.footer {
+            footer.1 = Some(icon);
+        } else {
+            new_embed.footer = Some((None, Some(icon)));
+        }
     }
 }

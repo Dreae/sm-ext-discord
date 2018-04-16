@@ -36,4 +36,7 @@ extern "C" {
     void set_new_embed_title(NewDiscordEmbed *new_embed, char *content);
     void set_new_embed_description(NewDiscordEmbed *new_embed, char *description);
     void new_embed_add_field(NewDiscordEmbed *new_embed, char *title, char *value, bool_t in_line);
+    void new_embed_set_color(NewDiscordEmbed *new_embed, unsigned char r, unsigned char g, unsigned char b);
+    void new_embed_set_footer_text(NewDiscordEmbed *new_embed, char *text);
+    void new_embed_set_footer_icon(NewDiscordEmbed *new_embed, char *url);
 }
