@@ -41,8 +41,8 @@ add_library(discord.ext SHARED ${SOURCE_FILES})
 add_dependencies(discord.ext discord_extension)
 
 target_link_libraries(discord.ext
-    debug "-lpthread -ldl -lcrypto -lssl -Wl,--no-undefined -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-unknown-linux-gnu/debug/libdiscord_extension.a"
-    optimized "-lpthread -ldl -lcrypto -lssl -Wl,--no-undefined -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-unknown-linux-gnu/release/libdiscord_extension.a"
+    debug "-Wl,--no-undefined -lpthread -ldl -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-unknown-linux-gnu/debug/libdiscord_extension.a -l:libssl.a -l:libcrypto.a -l:libz.a"
+    optimized "-Wl,--no-undefined -lpthread -ldl -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-unknown-linux-gnu/release/libdiscord_extension.a -l:libssl.a -l:libcrypto.a -l:libz.a"
 )
 
 
