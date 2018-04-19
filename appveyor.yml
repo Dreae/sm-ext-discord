@@ -15,3 +15,9 @@ configuration: Release
 before_build:
   - cmd: cd rust
   - cmd: cargo build --release
+
+build:
+  project: SM-EXT-Discord.sln
+
+artifacts:
+  - path: Release\discord.ext.dll
