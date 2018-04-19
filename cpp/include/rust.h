@@ -1,6 +1,7 @@
 #pragma once
 
 typedef unsigned long long int u64_t;
+typedef unsigned long int u32_t;
 typedef unsigned char bool_t;
 
 typedef void RustDiscordClient;
@@ -14,6 +15,10 @@ extern "C" {
         u64_t author_id;
         bool_t bot;
         bool_t own;
+        u64_t *mentioned_roles;
+        u32_t num_mentioned_roles;
+        u64_t *mentioned_users;
+        u32_t num_mentioned_users;
     } DiscordMessage;
 
     typedef struct {

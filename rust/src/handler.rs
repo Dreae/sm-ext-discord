@@ -3,7 +3,7 @@ use std::ffi::CString;
 use serenity::prelude::{EventHandler, Context};
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
-use serenity::model::id::{ChannelId, UserId};
+use serenity::model::id::{ChannelId, RoleId, UserId};
 use ::model::{DiscordMessage, DiscordReady};
 use ::client::ClientCallbacks;
 
@@ -28,12 +28,26 @@ impl EventHandler for Handler {
                 let content = CString::new(msg.content).unwrap();
                 let ChannelId(channel_id) = msg.channel_id;
                 let UserId(author_id) = msg.author.id;
+
+                let mentioned_roles: Vec<u64> = msg.mention_roles.into_iter().map(|role_id| {
+                    let RoleId(role) = role_id;
+                    role
+                }).collect();
+                let mentioned_users: Vec<u64> = msg.mentions.into_iter().map(|user| {
+                    let UserId(user_id) = user.id;
+                    user_id
+                }).collect();
+
                 let discord_message = DiscordMessage {
-                    content: content.into_raw(),
+                    content: content.as_ptr(),
                     channel_id,
                     author_id,
                     bot: if msg.author.bot { 1 } else { 0 },
-                    own
+                    own,
+                    mentioned_roles: mentioned_roles.as_ptr(),
+                    num_mentioned_roles: mentioned_roles.len() as u32,
+                    mentioned_users: mentioned_users.as_ptr(),
+                    num_mentioned_users: mentioned_users.len() as u32
                 };
 
                 if let Ok(callback) = callback.lock() {

@@ -48,6 +48,7 @@ public void On_DiscordMessage(DiscordMessage msg) {
     UInt64ToString(authorId, sAuthorId);
 
     PrintToServer("Got message from %s (%d) (%d):  %s", sAuthorId, msg.IsSelf(), msg.IsBot(), content);
+    PrintToServer("NumMentionedRoles: %d, NumMentionedUsers: %d, MentionsSelf: %d", msg.NumMentionedRoles(), msg.NumMentionedUsers(), msg.MentionsUser(g_iBotUserId));
 
     if (StrEqual("smtest", content)) {
         msg.ReplyToChannel("**test** *test* [test](https://google.com)");

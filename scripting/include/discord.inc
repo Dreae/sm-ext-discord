@@ -49,6 +49,54 @@ methodmap DiscordMessage < Handle {
      * @param id            The buffer to store the ChannelId
      */
     public native void ChannelId(int id[2]);
+
+    /**
+     * Determines if the supplied RoleId is mentioned in the
+     * content of this message
+     *
+     * @param id            The RoleId to search for
+     * @return              Was the role mentioned
+     */
+    public native bool MentionsRole(int id[2]);
+
+    /**
+     * Returns the number of roles mentioned in this message
+     *
+     * @return              The number of mentioned roles
+     */
+    public native int NumMentionedRoles();
+
+    /**
+     * Gets the RoleId for a mentioned role
+     *
+     * @param n             Which role to get the RoleId of
+     * @param id            Buffer to store RoleId
+     */
+    public native void GetMentionedRole(int n, int id[2]);
+
+    /**
+     * Determines if the supplied UserId is mentioned in the
+     * content of this message
+     *
+     * @param id            The UserId to search for
+     * @return              Was the role mentioned
+     */
+    public native bool MentionsUser(int id[2]);
+
+    /**
+     * Returns the number of users mentioned in this message
+     *
+     * @return              The number of mentioned users
+     */
+    public native int NumMentionedUsers();
+
+    /**
+     * Gets the UserId for a mentioned user
+     *
+     * @param n             Which user to get the UserId of
+     * @param id            Buffer to store UserId
+     */
+    public native void GetMentionedUser(int n, int id[2]);
 }
 
 methodmap DiscordReady < Handle {
