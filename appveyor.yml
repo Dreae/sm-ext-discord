@@ -14,7 +14,7 @@ configuration: Release
 
 before_build:
   - cmd: cd rust
-  - cmd: cargo build --release
+  - cmd: cargo build --release --target i686-pc-windows-msvc
 
 build:
   project: SM-EXT-Discord.sln
