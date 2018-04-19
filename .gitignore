@@ -1,3 +1,7 @@
 /build/
 /scripting/compiled/
 /rust/target/
+/Debug/
+/Release/
+/.vs/
+*.filters

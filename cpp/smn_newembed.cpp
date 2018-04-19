@@ -72,12 +72,16 @@ static cell_t native_NewEmbedAddField(IPluginContext *pContext, const cell_t *pa
     pContext->LocalToString(params[3], &value);
 
     new_embed_add_field(new_embed, title, value, params[4]);
+
+	return 1;
 }
 
 static cell_t native_NewEmbedSetColor(IPluginContext *pContext, const cell_t *params) {
     auto new_embed = ReadHandle<NewDiscordEmbed>(pContext, params[1], g_NewEmbedType);
 
     new_embed_set_color(new_embed, params[2], params[3], params[4]);
+
+	return 1;
 }
 
 static cell_t native_NewEmbedSetFooterText(IPluginContext *pContext, const cell_t *params) {
@@ -87,6 +91,8 @@ static cell_t native_NewEmbedSetFooterText(IPluginContext *pContext, const cell_
     pContext->LocalToString(params[2], &text);
 
     new_embed_set_footer_text(new_embed, text);
+
+	return 1;
 }
 
 static cell_t native_NewEmbedSetFooterIcon(IPluginContext *pContext, const cell_t *params) {
@@ -96,6 +102,8 @@ static cell_t native_NewEmbedSetFooterIcon(IPluginContext *pContext, const cell_
     pContext->LocalToString(params[2], &icon);
 
     new_embed_set_footer_icon(new_embed, icon);
+
+	return 1;
 }
 
 const sp_nativeinfo_t newembed_natives[] = {
