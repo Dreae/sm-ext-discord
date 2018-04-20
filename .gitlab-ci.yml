@@ -1,0 +1,68 @@
+image: "fedora:27"
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+  - build
+  - bundle
+
+build:linux:
+  stage: build
+  before_script:
+  - dnf -y install gcc gcc-c++ ninja-build
+  - dnf -y install cmake openssl-static.i686 boost-static.i686 zlib-static.i686 glibc-static.i686 libstdc++-static.i686 glibc-devel.i686 boost-devel openssl-devel
+  script:
+  - mkdir build
+  - cd build
+  - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
+  - ninja
+  artifacts:
+    paths:
+    - build/discord.ext.so
+
+build:windows:
+  stage: build
+  before_script:
+  - dnf -y install mingw32-gcc mingw32-gcc-c++ ninja-build
+  - dnf -y install cmake
+  script:
+  - mkdir build
+  - cd build
+  - CC=i686-w64-mingw32-gcc CXX=i686-w64-mingw32-g++ cmake -G Ninja -DTARGET=windows -DCMAKE_BUILD_TYPE=Release ..
+  - ninja
+  - cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libwinpthread-1.dll .
+  artifacts:
+    paths:
+    - build/discord.ext.dll
+    - build/libwinpthread-1.dll
+
+bundle:windows:
+  stage: bundle
+  before_script:
+  - dnf -y install zip
+  script:
+  - cd build
+  - mkdir -p bin
+  - mkdir -p csgo/addons/sourcemod/extensions
+  - cp libwinpthread-1.dll bin/
+  - cp discord.ext.dll csgo/addons/sourcemod/extensions/
+  - zip -r discord.zip bin/ csgo/
+  artifacts:
+    paths:
+    - build/discord.zip
+  dependencies:
+  - build:windows
+
+bundle:linux:
+  stage: bundle
+  script:
+  - cd build
+  - mkdir -p csgo/addons/sourcemod/extensions
+  - cp discord.ext.so csgo/addons/sourcemod/extensions/
+  - tar -cf discord.tar.gz csgo/
+  artifacts:
+    paths:
+    - build/discord.tar.gz
+  dependencies:
+  - build:linux

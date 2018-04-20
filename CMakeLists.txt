@@ -68,8 +68,8 @@ if(${TARGET} STREQUAL linux)
     )
 else()
     target_link_libraries(discord.ext
-        debug "-Wl,--no-undefined -lpthread -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-pc-windows-gnu/debug/discord_extension.lib -lncrypt -luserenv -lsecur32 -lcrypt32 -lz -lwsock32 -lgdi32 -lws2_32"
-        optimized "-Wl,--no-undefined -lpthread -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-pc-windows-gnu/release/discord_extension.lib -lncrypt -luserenv -lsecur32 -lcrypt32 -lz -lwsock32 -lgdi32 -lws2_32"
+        debug "-Wl,--no-undefined -lpthread -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-pc-windows-gnu/debug/discord_extension.lib -lncrypt -luserenv -lsecur32 -lcrypt32 -lwsock32 -lgdi32 -lws2_32"
+        optimized "-Wl,--no-undefined -lpthread -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-pc-windows-gnu/release/discord_extension.lib -lncrypt -luserenv -lsecur32 -lcrypt32 -lwsock32 -lgdi32 -lws2_32"
     )
 endif()
 
