@@ -232,7 +232,7 @@ native void UInt64ToString(int u64[2], char buffer[20]);
  * @param buffer        The buffer to parse
  * @param u64           The buffer to store the parsed value
  */
-native void StringToUint64(const char[] buffer, int u64[2]);
+native void StringToUInt64(const char[] buffer, int u64[2]);
 
 /**
  * Sends a rich message to the specified ChannelId

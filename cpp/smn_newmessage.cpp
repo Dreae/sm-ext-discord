@@ -41,6 +41,7 @@ static cell_t native_CreateNewDiscordMessage(IPluginContext *pContext, const cel
     return hndl;
 }
 
+// TODO: These should take format options
 static cell_t native_SetNewMessageContent(IPluginContext *pContext, const cell_t *params) {
     auto new_message = ReadHandle<NewDiscordMessage>(pContext, params[1], g_NewMessageType);
 
