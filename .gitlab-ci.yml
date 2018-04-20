@@ -12,7 +12,13 @@ build:linux:
   before_script:
   - dnf -y install gcc gcc-c++ ninja-build
   - dnf -y install cmake openssl-static.i686 boost-static.i686 zlib-static.i686 glibc-static.i686 libstdc++-static.i686 glibc-devel.i686 boost-devel openssl-devel
+  - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
+  - export PATH=$PATH:~/.cargo/bin
+  - rustup target add i686-unknown-linux-gnu
   script:
+  - cd rust
+  - cargo build --release --target i686-unknown-linux-gnu
+  - cd ../
   - mkdir build
   - cd build
   - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
@@ -26,6 +32,13 @@ build:windows:
   before_script:
   - dnf -y install mingw32-gcc mingw32-gcc-c++ ninja-build
   - dnf -y install cmake
+  - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
+  - export PATH=$PATH:~/.cargo/bin
+  - rustup target add i686-pc-windows-gnu
+  script:
+  - cd rust
+  - cargo build --release --target i686-pc-windows-gnu
+  - cd ../
   script:
   - mkdir build
   - cd build
