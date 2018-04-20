@@ -11,9 +11,9 @@ build:linux:
   stage: build
   before_script:
   - dnf -y install gcc gcc-c++ ninja-build
-  - dnf -y install cmake openssl-static.i686 boost-static.i686 zlib-static.i686 glibc-static.i686 libstdc++-static.i686 glibc-devel.i686 boost-devel openssl-devel
+  - dnf -y install cmake openssl-static.i686 glibc-static.i686 libstdc++-static.i686 glibc-devel.i686 openssl-devel.i686
   - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
-  - export PATH=$PATH:~/.cargo/bin
+  - source ~/.cargo/env
   - rustup target add i686-unknown-linux-gnu
   script:
   - mkdir build
@@ -34,7 +34,7 @@ build:windows:
   - dnf -y install mingw32-gcc mingw32-gcc-c++ ninja-build
   - dnf -y install cmake
   - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
-  - export PATH=$PATH:~/.cargo/bin
+  - source ~/.cargo/env
   - rustup target add i686-pc-windows-gnu
   script:
   - mkdir build
