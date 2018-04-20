@@ -16,13 +16,10 @@ build:linux:
   - export PATH=$PATH:~/.cargo/bin
   - rustup target add i686-unknown-linux-gnu
   script:
-  - cd rust
-  - PKG_CONFIG_ALLOW_CROSS=1 cargo build --release --target i686-unknown-linux-gnu
-  - cd ../
   - mkdir build
   - cd build
   - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
-  - ninja
+  - PKG_CONFIG_ALLOW_CROSS=1 ninja
   artifacts:
     paths:
     - build/discord.ext.so
@@ -40,14 +37,10 @@ build:windows:
   - export PATH=$PATH:~/.cargo/bin
   - rustup target add i686-pc-windows-gnu
   script:
-  - cd rust
-  - cargo build --release --target i686-pc-windows-gnu
-  - cd ../
-  script:
   - mkdir build
   - cd build
   - CC=i686-w64-mingw32-gcc CXX=i686-w64-mingw32-g++ cmake -G Ninja -DTARGET=windows -DCMAKE_BUILD_TYPE=Release ..
-  - ninja
+  - PKG_CONFIG_ALLOW_CROSS=1 ninja
   - cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libwinpthread-1.dll .
   artifacts:
     paths:
