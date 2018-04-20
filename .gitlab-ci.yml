@@ -19,7 +19,7 @@ build:linux:
   - mkdir build
   - cd build
   - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
-  - PKG_CONFIG_ALLOW_CROSS=1 ninja
+  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_DIR=/usr ninja
   artifacts:
     paths:
     - build/discord.ext.so
@@ -27,46 +27,6 @@ build:linux:
     paths:
     - rust/target
     - ~/cargo/registry
-
-build:windows:
-  stage: build
-  before_script:
-  - dnf -y install mingw32-gcc mingw32-gcc-c++ ninja-build
-  - dnf -y install cmake
-  - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
-  - source ~/.cargo/env
-  - rustup target add i686-pc-windows-gnu
-  script:
-  - mkdir build
-  - cd build
-  - CC=i686-w64-mingw32-gcc CXX=i686-w64-mingw32-g++ cmake -G Ninja -DTARGET=windows -DCMAKE_BUILD_TYPE=Release ..
-  - PKG_CONFIG_ALLOW_CROSS=1 ninja
-  - cp /usr/i686-w64-mingw32/sys-root/mingw/bin/libwinpthread-1.dll .
-  artifacts:
-    paths:
-    - build/discord.ext.dll
-    - build/libwinpthread-1.dll
-  cache:
-    paths:
-    - rust/target
-    - ~/cargo/registry
-
-bundle:windows:
-  stage: bundle
-  before_script:
-  - dnf -y install zip
-  script:
-  - cd build
-  - mkdir -p bin
-  - mkdir -p csgo/addons/sourcemod/extensions
-  - cp libwinpthread-1.dll bin/
-  - cp discord.ext.dll csgo/addons/sourcemod/extensions/
-  - zip -r discord.zip bin/ csgo/
-  artifacts:
-    paths:
-    - build/discord.zip
-  dependencies:
-  - build:windows
 
 bundle:linux:
   stage: bundle
