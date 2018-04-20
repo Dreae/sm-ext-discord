@@ -21,3 +21,6 @@ build:
 
 artifacts:
   - path: Release\discord.ext.dll
+
+cache:
+  - rust/target
