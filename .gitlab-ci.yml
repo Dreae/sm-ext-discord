@@ -17,7 +17,7 @@ build:linux:
   - rustup target add i686-unknown-linux-gnu
   script:
   - cd rust
-  - cargo build --release --target i686-unknown-linux-gnu
+  - PKG_CONFIG_ALLOW_CROSS=1 cargo build --release --target i686-unknown-linux-gnu
   - cd ../
   - mkdir build
   - cd build
@@ -26,6 +26,10 @@ build:linux:
   artifacts:
     paths:
     - build/discord.ext.so
+  cache:
+    paths:
+    - rust/target
+    - ~/cargo/registry
 
 build:windows:
   stage: build
@@ -49,6 +53,10 @@ build:windows:
     paths:
     - build/discord.ext.dll
     - build/libwinpthread-1.dll
+  cache:
+    paths:
+    - rust/target
+    - ~/cargo/registry
 
 bundle:windows:
   stage: bundle

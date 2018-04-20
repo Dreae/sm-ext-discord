@@ -24,3 +24,4 @@ artifacts:
 
 cache:
   - rust/target
+  - C:\Users\appveyor\.cargo\registry
