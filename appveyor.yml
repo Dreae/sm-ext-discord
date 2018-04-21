@@ -14,17 +14,17 @@ configuration: Release
 
 before_build:
   - cmd: cd hl2sdk
-  - cmd: git checkout $(SDK)
+  - cmd: git checkout %SDK%
   - cmd: cd ..
   - cmd: mkdir build
   - cmd: cd build
-  - cmd: cmake -DCMAKE_BUILD_TYPE=Release -DSDK=$(SDK) ..
+  - cmd: cmake -DCMAKE_BUILD_TYPE=Release -DSDK=%SDK% ..
 
 after_build:
-  - cmd: rename Release\discord.ext.dll discord.ext.2.$(SDK).dll
+  - cmd: rename Release\discord.ext.dll discord.ext.2.%SDK%.dll
   - cmd: mkdir extensions scripting\include
   - cmd: xcopy /s ..\scripting\include scripting\include
-  - cmd: copy Release\discord.ext.2.$(SDK).dll extensions
+  - cmd: copy Release\discord.ext.2.%SDK%.dll extensions
   - cmd: 7z a discord.zip extensions\ scripting\
 
 build:
