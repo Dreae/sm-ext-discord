@@ -31,7 +31,7 @@ build:
   project: build\ALL_BUILD.vcxproj
 
 artifacts:
-  - path: build\Release\discord.zip
+  - path: build\discord.zip
 
 cache:
   - rust/target

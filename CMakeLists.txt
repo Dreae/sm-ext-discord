@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 project(discord)
 
+if(NOT SDK)
+    set(SDK csgo)
+endif()
+
 set(SOURCE_FILES
     cpp/Extension.cpp
     cpp/smn_extension.cpp
@@ -26,6 +30,13 @@ endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-DCOMPILER_GCC -D_vsnprintf=vsnprintf -D_snprintf=snprintf -D_stricmp=strcasecmp -Dstricmp=strcasecmp)
+endif()
+
+if(${SDK} STREQUAL "insurgency")
+    add_definitions(-DNETWORK_VARS_ENABLED)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
+    endif()
 endif()
 
 include(CMakeLists.rust.txt)
@@ -60,10 +71,6 @@ add_library(discord.ext SHARED ${SOURCE_FILES})
 
 add_dependencies(discord.ext discord_extension)
 
-if(NOT SDK)
-    set(SDK csgo)
-endif()
-
 if(MSVC)
     target_link_libraries(discord.ext
         general kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib legacy_stdio_definitions.lib userenv.lib ncrypt.lib secur32.lib ws2_32.lib crypt32.lib tier1.lib tier0.lib
@@ -71,7 +78,7 @@ if(MSVC)
         optimized discord_rust
     )
 
-    if(${SDK} STREQUAL "csgo")
+    if(${SDK} STREQUAL "csgo" OR ${SDK} STREQUAL "insurgency")
         target_link_libraries(discord.ext general interfaces.lib)
     endif()
 else()
@@ -85,6 +92,8 @@ else()
 
     if(${SDK} STREQUAL "csgo")
         target_link_libraries(discord.ext general :interfaces_i486.a tier0)
+    elseif(${SDK} STREQUAL "insurgency")
+        target_link_libraries(discord.ext general :interfaces_i486.a tier0_srv)
     else()
         target_link_libraries(discord.ext general tier0_srv)
     endif()
