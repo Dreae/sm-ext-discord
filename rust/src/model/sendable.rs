@@ -1,6 +1,6 @@
 use serenity::model::id::ChannelId;
 
-use std::thread;
+use ::MSG_POOL;
 
 #[derive(Default)]
 pub struct SendableDiscordMessage {
@@ -106,8 +106,7 @@ pub mod c {
     #[no_mangle]
     pub extern "C" fn send_new_discord_message(channel_id: u64, new_message: *mut SendableDiscordMessage) {
         let new_message = unsafe { Box::from_raw(new_message) };
-        // TODO: Thread pooling?
-        thread::spawn(move || {
+        MSG_POOL.spawn(move || {
             new_message.send(ChannelId(channel_id));
         });
     }

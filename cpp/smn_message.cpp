@@ -47,8 +47,16 @@ static cell_t native_GetMessageContent(IPluginContext *pContext, const cell_t *p
 static cell_t native_ReplyToChannel(IPluginContext *pContext, const cell_t *params) {
     DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
-    char *msg_content;
-    pContext->LocalToString(params[2], &msg_content);
+    char msg_content[2000];
+    {
+        DetectExceptions eh(pContext);
+        size_t len = smutils->FormatString(msg_content, sizeof(msg_content) - 1, pContext, params, 2);
+        if (eh.HasException()) {
+            return 1;
+        }
+        msg_content[len] = '\0';
+    }
+
     say_to_channel(msg->channel_id, msg_content);
 
     return 1;

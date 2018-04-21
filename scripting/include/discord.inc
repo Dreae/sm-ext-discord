@@ -20,7 +20,7 @@ methodmap DiscordMessage < Handle {
      *
      * @param content       The content to send to the channel
      */
-    public native void ReplyToChannel(const char[] content);
+    public native void ReplyToChannel(const char[] content, any ...);
 
     /**
      * Indicates whether the message was sent by a bot
@@ -159,14 +159,14 @@ methodmap NewDiscordEmbed < Handle {
      *
      * @param title         The title of this embed
      */
-    public native void SetTitle(const char[] title);
+    public native void SetTitle(const char[] title, any ...);
 
     /**
      * Sets the description for this embed object
      *
      * @param description   The title of this embed
      */
-    public native void SetDescription(const char[] description);
+    public native void SetDescription(const char[] description, any ...);
 
     /**
      * Adds a field to this embed object
@@ -182,7 +182,7 @@ methodmap NewDiscordEmbed < Handle {
      *
      * @param text          The text for the footer
      */
-    public native void SetFooterText(const char[] text);
+    public native void SetFooterText(const char[] text, any ...);
 
     /**
      * Sets the footer icon for this embed object
@@ -206,7 +206,7 @@ methodmap NewDiscordMessage < Handle {
      *
      * @param content       The content to send to Discord
      */
-    public native void SetContent(const char[] content);
+    public native void SetContent(const char[] content, any ...);
 
     /**
      * Sets the embed to be included with this message
@@ -224,7 +224,7 @@ methodmap NewDiscordMessage < Handle {
  * @param u64           The UInt64 to convert
  * @param buffer        The buffer to store the converted value
  */
-native void UInt64ToString(int u64[2], char buffer[20]);
+native void UInt64ToString(int u64[2], char buffer[24]);
 
 /**
  * Parses a UInt64 from a string

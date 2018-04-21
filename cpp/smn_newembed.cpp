@@ -44,8 +44,15 @@ static cell_t native_CreateNewDiscordEmbed(IPluginContext *pContext, const cell_
 static cell_t native_SetNewEmbedTitle(IPluginContext *pContext, const cell_t *params) {
     auto new_embed = ReadHandle<NewDiscordEmbed>(pContext, params[1], g_NewEmbedType);
 
-    char *title;
-    pContext->LocalToString(params[2], &title);
+    char title[256];
+    {
+        DetectExceptions eh(pContext);
+        size_t len = smutils->FormatString(title, sizeof(title) - 1, pContext, params, 2);
+        if (eh.HasException()) {
+            return 0;
+        }
+        title[len] = '\0';
+    }
 
     set_new_embed_title(new_embed, title);
 
@@ -55,8 +62,15 @@ static cell_t native_SetNewEmbedTitle(IPluginContext *pContext, const cell_t *pa
 static cell_t native_SetNewEmbedDescription(IPluginContext *pContext, const cell_t *params) {
     auto new_embed = ReadHandle<NewDiscordEmbed>(pContext, params[1], g_NewEmbedType);
 
-    char *description;
-    pContext->LocalToString(params[2], &description);
+    char description[512];
+    {
+        DetectExceptions eh(pContext);
+        size_t len = smutils->FormatString(description, sizeof(description) - 1, pContext, params, 2);
+        if (eh.HasException()) {
+            return 0;
+        }
+        description[len] = '\0';
+    }
 
     set_new_embed_description(new_embed, description);
 
@@ -87,8 +101,15 @@ static cell_t native_NewEmbedSetColor(IPluginContext *pContext, const cell_t *pa
 static cell_t native_NewEmbedSetFooterText(IPluginContext *pContext, const cell_t *params) {
     auto new_embed = ReadHandle<NewDiscordEmbed>(pContext, params[1], g_NewEmbedType);
 
-    char *text;
-    pContext->LocalToString(params[2], &text);
+    char text[512];
+    {
+        DetectExceptions eh(pContext);
+        size_t len = smutils->FormatString(text, sizeof(text) - 1, pContext, params, 2);
+        if (eh.HasException()) {
+            return 0;
+        }
+        text[len] = '\0';
+    }
 
     new_embed_set_footer_text(new_embed, text);
 

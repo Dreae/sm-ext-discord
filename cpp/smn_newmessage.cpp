@@ -41,12 +41,18 @@ static cell_t native_CreateNewDiscordMessage(IPluginContext *pContext, const cel
     return hndl;
 }
 
-// TODO: These should take format options
 static cell_t native_SetNewMessageContent(IPluginContext *pContext, const cell_t *params) {
     auto new_message = ReadHandle<NewDiscordMessage>(pContext, params[1], g_NewMessageType);
 
-    char *content;
-    pContext->LocalToString(params[2], &content);
+    char content[2000];
+    DetectExceptions eh(pContext);
+    {
+        size_t len = smutils->FormatString(content, sizeof(content) - 1, pContext, params, 2);
+        if (eh.HasException()) {
+            return 0;
+        }
+        content[len] = '\0';
+    }
 
     set_new_message_content(new_message, content);
 

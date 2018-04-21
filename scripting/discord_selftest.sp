@@ -32,7 +32,7 @@ public void OnConfigsExecuted() {
 
 public void On_DiscordReady(DiscordReady ready) {
     ready.CurrentUserId(g_iBotUserId);
-    char buffer[20];
+    char buffer[24];
     UInt64ToString(g_iBotUserId, buffer);
 
     PrintToServer("Bot user is %s", buffer);
@@ -41,7 +41,7 @@ public void On_DiscordReady(DiscordReady ready) {
 public void On_DiscordMessage(DiscordMessage msg) {
     char content[256];
     int authorId[2];
-    char sAuthorId[20];
+    char sAuthorId[24];
 
     msg.GetContent(content, sizeof(content));
     msg.AuthorId(authorId);
