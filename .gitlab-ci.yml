@@ -7,7 +7,7 @@ stages:
   - build
 
 before_script:
-- dnf -y install gcc gcc-c++ ninja-build
+- dnf -y install gcc gcc-c++ ninja-build git
 - dnf -y install cmake openssl-static.i686 glibc-static.i686 libstdc++-static.i686 glibc-devel.i686 openssl-devel.i686 zlib-static.i686
 - curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
 - source ~/.cargo/env
