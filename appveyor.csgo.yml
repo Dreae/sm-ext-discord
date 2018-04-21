@@ -17,12 +17,13 @@ before_build:
   - cmd: cargo build --release --target i686-pc-windows-msvc
   - cmd: cd ..\hl2sdk
   - cmd: git checkout csgo
+  - cmd: ren Release\discord.ext.dll Release\discord.ext.2.csgo.dll
 
 build:
   project: SM-EXT-Discord.sln
 
 artifacts:
-  - path: Release\discord.ext.dll
+  - path: Release\discord.ext.2.csgo.dll
 
 cache:
   - rust/target
