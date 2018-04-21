@@ -14,15 +14,32 @@ set(SOURCE_FILES
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe -DSOURCEMOD_BUILD -D_LINUX -DPOSIX -DCOMPILER_GCC -DSMEXT_CONF_METAMOD -fno-strict-aliasing -m32")
+add_definitions(-DSOURCEMOD_BUILD -DSMEXT_CONF_METAMOD)
+
+if(MSVC)
+    add_definitions(-DWIN32 -D_WINDOWS -DCOMPILER_MSVC -DCOMPILER_MSVC32)
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe -fno-strict-aliasing -m32")
+    add_definitions(-D_LINUX -DPOSIX)
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(-DCOMPILER_GCC)
+endif()
 
 include(ExternalProject)
+
+if(MSVC)
+    set(RUST_TARGET_TRIPLE "i686-pc-windows-msvc")
+else()
+    set(RUST_TARGET_TRIPLE "i686-unknown-linux-gnu")
+endif()
 
 ExternalProject_Add(
     discord_extension
     DOWNLOAD_COMMAND ""
     CONFIGURE_COMMAND ""
-    BUILD_COMMAND cargo build --target i686-unknown-linux-gnu COMMAND cargo build --release --target i686-unknown-linux-gnu
+    BUILD_COMMAND cargo build --target ${RUST_TARGET_TRIPLE} COMMAND cargo build --release --target ${RUST_TARGET_TRIPLE}
     BINARY_DIR "${CMAKE_SOURCE_DIR}/rust"
     INSTALL_COMMAND ""
 )
@@ -43,18 +60,31 @@ include_directories(
     hl2sdk/dlls
 )
 
-link_directories(
-    hl2sdk/lib/linux
-)
+if(MSVC)
+    link_directories(
+        hl2sdk/lib/public
+    )
+else()
+    link_directories(
+        hl2sdk/lib/linux
+    )
+endif()
 
 add_library(discord.ext SHARED ${SOURCE_FILES})
 
 add_dependencies(discord.ext discord_extension)
 
-target_link_libraries(discord.ext
-    debug "-Wl,--no-undefined -ltier0 -lpthread -ldl -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-unknown-linux-gnu/debug/libdiscord_extension.a -l:libssl.a -l:libcrypto.a -l:libz.a -l:tier1_i486.a -l:interfaces_i486.a"
-    optimized "-Wl,--no-undefined -ltier0 -lpthread -ldl -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-unknown-linux-gnu/release/libdiscord_extension.a -l:libssl.a -l:libcrypto.a -l:libz.a -l:tier1_i486.a -l:interfaces_i486.a"
-)
-
+if(MSVC)
+    target_link_libraries(discord.ext
+        general kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib legacy_stdio_definitions.lib userenv.lib ncrypt.lib secur32.lib ws2_32.lib crypt32.lib tier1.lib tier0.lib interfaces.lib
+        debug "${CMAKE_SOURCE_DIR}/rust/target/i686-pc-windows-msvc/debug/discord_extension.lib"
+        optimized "${CMAKE_SOURCE_DIR}/rust/target/i686-pc-windows-msvc/release/discord_extension.lib"
+    )
+else()
+    target_link_libraries(discord.ext
+        debug "-Wl,--no-undefined -ltier0 -lpthread -ldl -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-unknown-linux-gnu/debug/libdiscord_extension.a -l:libssl.a -l:libcrypto.a -l:libz.a -l:tier1_i486.a -l:interfaces_i486.a"
+        optimized "-Wl,--no-undefined -ltier0 -lpthread -ldl -m32 -static-libgcc -static-libstdc++ ${CMAKE_SOURCE_DIR}/rust/target/i686-unknown-linux-gnu/release/libdiscord_extension.a -l:libssl.a -l:libcrypto.a -l:libz.a -l:tier1_i486.a -l:interfaces_i486.a"
+    )
+endif()
 
 set_target_properties(discord.ext PROPERTIES PREFIX "")

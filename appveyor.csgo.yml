@@ -13,17 +13,18 @@ platform: x86
 configuration: Release
 
 before_build:
-  - cmd: cd rust
-  - cmd: cargo build --release --target i686-pc-windows-msvc
   - cmd: cd ..\hl2sdk
   - cmd: git checkout csgo
-  - cmd: cd ..\
+  - cmd: cd ..
+  - cmd: mkdir build
+  - cmd: cd build
+  - cmd: cmake ..
 
 after_build:
   - cmd: rename Release\discord.ext.dll discord.ext.2.csgo.dll
 
 build:
-  project: SM-EXT-Discord.sln
+  project: ALL_BUILD.vcxproj
 
 artifacts:
   - path: Release\discord.ext.2.csgo.dll
