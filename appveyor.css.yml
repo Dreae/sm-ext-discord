@@ -14,20 +14,20 @@ configuration: Release
 
 before_build:
   - cmd: cd hl2sdk
-  - cmd: git checkout csgo
+  - cmd: git checkout css
   - cmd: cd ..
   - cmd: mkdir build
   - cmd: cd build
-  - cmd: cmake -DCMAKE_BUILD_TYPE=Relase -DSDK=csgo ..
+  - cmd: cmake -DCMAKE_BUILD_TYPE=Relase -DSDK=css ..
 
 after_build:
-  - cmd: rename Release\discord.ext.dll discord.ext.2.csgo.dll
+  - cmd: rename Release\discord.ext.dll discord.ext.2.css.dll
 
 build:
   project: build\ALL_BUILD.vcxproj
 
 artifacts:
-  - path: build\Release\discord.ext.2.csgo.dll
+  - path: build\Release\discord.ext.2.css.dll
 
 cache:
   - rust/target

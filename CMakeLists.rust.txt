@@ -1,0 +1,39 @@
+include(ExternalProject)
+
+if(MSVC)
+    set(RUST_TARGET_TRIPLE "i686-pc-windows-msvc")
+else()
+    set(RUST_TARGET_TRIPLE "i686-unknown-linux-gnu")
+endif()
+
+if(CMAKE_BUILD_TYPE MATCHES "[Re][Ee][Ll][Ee][Aa][Ss][Ee]")
+    set(RUST_BUILD_TARGET "release")
+else()
+    set(RUST_BUILD_TARGET "debug")
+endif()
+
+set(RUST_TARGET_FLAG "")
+if(${RUST_BUILD_TARGET} STREQUAL "release")
+    set(RUST_TARGET_FLAG "--release")
+endif()
+
+if(MSVC)
+    set(RUST_BYPRODUCT "discord_extension.lib")
+else()
+    set(RUST_BYPRODUCT "libdiscord_extension.a")
+endif()
+
+set(RUST_LIB "${CMAKE_SOURCE_DIR}/rust/target/${RUST_TARGET_TRIPLE}/${RUST_BUILD_TARGET}/${RUST_BYPRODUCT}")
+
+ExternalProject_Add(
+    discord_extension
+    DOWNLOAD_COMMAND ""
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND cargo build --target ${RUST_TARGET_TRIPLE} ${RUST_TARGET_FLAG}
+    BINARY_DIR "${CMAKE_SOURCE_DIR}/rust"
+    INSTALL_COMMAND ""
+    BUILD_BYPRODUCTS ${RUST_LIB}
+)
+
+add_library(discord_rust STATIC IMPORTED)
+set_property(TARGET discord_rust PROPERTY IMPORTED_LOCATION ${RUST_LIB})

@@ -27,22 +27,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     add_definitions(-DCOMPILER_GCC -D_vsnprintf=vsnprintf -D_snprintf=snprintf -D_stricmp=strcasecmp -Dstricmp=strcasecmp)
 endif()
 
-include(ExternalProject)
-
-if(MSVC)
-    set(RUST_TARGET_TRIPLE "i686-pc-windows-msvc")
-else()
-    set(RUST_TARGET_TRIPLE "i686-unknown-linux-gnu")
-endif()
-
-ExternalProject_Add(
-    discord_extension
-    DOWNLOAD_COMMAND ""
-    CONFIGURE_COMMAND ""
-    BUILD_COMMAND cargo build --target ${RUST_TARGET_TRIPLE} COMMAND cargo build --release --target ${RUST_TARGET_TRIPLE}
-    BINARY_DIR "${CMAKE_SOURCE_DIR}/rust"
-    INSTALL_COMMAND ""
-)
+include(CMakeLists.rust.txt)
 
 include_directories(
     sourcemod/public
@@ -81,23 +66,23 @@ endif()
 if(MSVC)
     target_link_libraries(discord.ext
         general kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib legacy_stdio_definitions.lib userenv.lib ncrypt.lib secur32.lib ws2_32.lib crypt32.lib tier1.lib tier0.lib
-        debug "${CMAKE_SOURCE_DIR}/rust/target/i686-pc-windows-msvc/debug/discord_extension.lib"
-        optimized "${CMAKE_SOURCE_DIR}/rust/target/i686-pc-windows-msvc/release/discord_extension.lib"
+        debug discord_rust
+        optimized discord_rust
     )
 
-    if(${SDK} STREQUAL csgo)
+    if(${SDK} STREQUAL "csgo")
         target_link_libraries(discord.ext general interfaces.lib)
     endif()
 else()
     target_link_libraries(discord.ext
         general "-Wl,--no-undefined -lpthread -ldl -m32 -static-libgcc -static-libstdc++"
-        debug ${CMAKE_SOURCE_DIR}/rust/target/i686-unknown-linux-gnu/debug/libdiscord_extension.a
-        optimized ${CMAKE_SOURCE_DIR}/rust/target/i686-unknown-linux-gnu/release/libdiscord_extension.a
+        debug discord_rust
+        optimized discord_rust
     )
 
     target_link_libraries(discord.ext general :libssl.a :libcrypto.a :libz.a :tier1_i486.a)
 
-    if(${SDK} STREQUAL csgo)
+    if(${SDK} STREQUAL "csgo")
         target_link_libraries(discord.ext general :interfaces_i486.a tier0)
     else()
         target_link_libraries(discord.ext general tier0_srv)
