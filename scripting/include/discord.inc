@@ -108,42 +108,8 @@ methodmap DiscordReady < Handle {
     public native void CurrentUserId(int id[2]);
 }
 
-typedef DiscordMessageCallback = function void (DiscordMessage msg);
-typedef DiscordReadyCallback = function void (DiscordReady ready);
-
-methodmap DiscordClient < Handle {
-    /**
-     * Constructs a new DiscordClient
-     *
-     * @param token         The bot token to use to connect
-     *                      to discord
-     * @return              A Handle to the new DiscordClient
-     */
-    public native DiscordClient(const char[] token);
-
-    /**
-     * Sets the callback that will be called when this client
-     * receives a message from Discord
-     *
-     * @param cb            The callback to be called
-     */
-    public native void SetMessageCallback(DiscordMessageCallback cb);
-
-    /**
-     * Sets the callback that will be called when this client
-     * is connected to Discord and ready to start processing
-     * events.
-     *
-     * @param cb            The callback to be called
-     */
-    public native void SetReadyCallback(DiscordReadyCallback cb);
-
-    /**
-     * Connect this client to Discord to actually start
-     * processing messages
-     */
-    public native void Connect();
-}
+forward void OnDiscordMessage(DiscordMessage msg);
+forward void OnDiscordReady(DiscordReady ready);
 
 methodmap NewDiscordEmbed < Handle {
     /**

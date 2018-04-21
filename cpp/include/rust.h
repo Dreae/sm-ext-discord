@@ -25,10 +25,7 @@ extern "C" {
         u64_t user_id;
     } DiscordReady;
 
-    RustDiscordClient *create_client(void *plugin, char *token);
-    void client_set_msg_callback(RustDiscordClient *client, void *callback);
-    void client_set_ready_callback(RustDiscordClient *client, void *callback);
-    void connect_client(RustDiscordClient *client);
+    void start_discord_client(const char *token);
 
     void say_to_channel(u64_t channel_id, char *content);
 

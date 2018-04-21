@@ -2,6 +2,7 @@
 
 #include "include/smsdk_ext.h"
 #include "include/rust.h"
+#include <convar.h>
 
 #define LOG_MESSAGE(format, ...) \
   smutils->LogMessage(myself, format, ##__VA_ARGS__);
@@ -24,10 +25,14 @@ inline T *ReadHandle(IPluginContext *pContext, const cell_t handle, HandleType_t
     return obj;
 }
 
-class Extension : public SDKExtension {
+class Extension : public SDKExtension, public IConCommandBaseAccessor {
 public:
   virtual bool SDK_OnLoad(char *error, size_t err_max, bool late);
   virtual void SDK_OnUnload();
+  virtual bool SDK_OnMetamodLoad(ISmmAPI *ismm, char *error, size_t maxlen, bool late);
+  virtual void OnCoreMapStart(edict_t *pEdictList, int edictCount, int clientMax);
+public: // IConCommandBaseAccessor
+  bool RegisterConCommandBase(ConCommandBase *pVar);
 };
 
 class BaseClass {
@@ -45,3 +50,6 @@ private:
 };
 
 extern Extension extension;
+extern IForward *g_MessageForward;
+extern IForward *g_ReadyForward;
+extern ConVar discord_bot_token;

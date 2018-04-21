@@ -1,38 +1,28 @@
 #include "glue.hpp"
 #include "handletypes.hpp"
 
-void call_message_callback(void *callback, IdentityToken_t *plugin, DiscordMessage *msg) {
-    if (callback) {
-        auto cb = (IPluginFunction *)callback;
-
-        HandleError err;
-        auto hndl = handlesys->CreateHandle(g_MessageType, msg, plugin, myself->GetIdentity(), &err);
-        if (!hndl) {
-            smutils->LogError(myself, "Got null handle, error code: %d", err);
-        }
-
-        cb->PushCell(hndl);
-        cb->Execute(nullptr);
-
-        handlesys->FreeHandle(hndl, nullptr);
+void call_message_callback(DiscordMessage *msg) {
+    HandleError err;
+    auto hndl = handlesys->CreateHandle(g_MessageType, msg, nullptr, myself->GetIdentity(), &err);
+    if (!hndl) {
+        smutils->LogError(myself, "Got null handle, error code: %d", err);
+        return;
     }
+
+    g_MessageForward->PushCell(hndl);
+    g_MessageForward->Execute();
 }
 
-void call_ready_callback(void *callback, IdentityToken_t *plugin, DiscordReady *ready) {
-    if (callback) {
-        auto cb = (IPluginFunction *)callback;
-
-        HandleError err;
-        auto hndl = handlesys->CreateHandle(g_ReadyType, ready, plugin, myself->GetIdentity(), &err);
-        if (!hndl) {
-            smutils->LogError(myself, "Got null handle, error code: %d", err);
-        }
-
-        cb->PushCell(hndl);
-        cb->Execute(nullptr);
-
-        handlesys->FreeHandle(hndl, nullptr);
+void call_ready_callback(DiscordReady *ready) {
+    HandleError err;
+    auto hndl = handlesys->CreateHandle(g_ReadyType, ready, nullptr, myself->GetIdentity(), &err);
+    if (!hndl) {
+        smutils->LogError(myself, "Got null handle, error code: %d", err);
+        return;
     }
+
+    g_ReadyForward->PushCell(hndl);
+    g_ReadyForward->Execute();
 }
 
 void log_error(char *msg) {

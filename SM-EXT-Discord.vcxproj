@@ -73,28 +73,29 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SMEXTDISCORD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;SMEXT_CONF_METAMOD;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_DEBUG;_WINDOWS;_USRDLL;SMEXTDISCORD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\sourcemod\sourcepawn\include;.\sourcemod\public\amtl\amtl;.\sourcemod\public\amtl;.\sourcemod\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\sourcemod\sourcepawn\include;.\sourcemod\public\amtl\amtl;.\sourcemod\public\amtl;.\sourcemod\public;.\metamod-source\core;.\metamod-source\core\sourcehook;.\hl2sdk\game\shared;.\hl2sdk\public\vstdlib;.\hl2sdk\public\tier1;.\hl2sdk\public\tier0;.\hl2sdk\public\engine;.\hl2sdk\public;.\hl2sdk\dlls;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>Userenv.lib;Ncrypt.lib;secur32.lib;ws2_32.lib;crypt32.lib;rust/target/i686-pc-windows-msvc/debug/discord_extension.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;userenv.lib;ncrypt.lib;secur32.lib;ws2_32.lib;crypt32.lib;tier1.lib;tier0.lib;interfaces.lib;rust/target/i686-pc-windows-msvc/debug/discord_extension.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\hl2sdk\lib\public;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SMEXTDISCORD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;SMEXT_CONF_METAMOD;SOURCEMOD_BUILD;COMPILER_MSVC;COMPILER_MSVC32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;NDEBUG;_WINDOWS;_USRDLL;SMEXTDISCORD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>.\sourcemod\sourcepawn\include;.\sourcemod\public\amtl\amtl;.\sourcemod\public\amtl;.\sourcemod\public;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\sourcemod\sourcepawn\include;.\sourcemod\public\amtl\amtl;.\sourcemod\public\amtl;.\sourcemod\public;.\metamod-source\core;.\metamod-source\core\sourcehook;.\hl2sdk\game\shared;.\hl2sdk\public\vstdlib;.\hl2sdk\public\tier1;.\hl2sdk\public\tier0;.\hl2sdk\public\engine;.\hl2sdk\public;.\hl2sdk\dlls;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -102,16 +103,15 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Userenv.lib;Ncrypt.lib;secur32.lib;ws2_32.lib;crypt32.lib;rust/target/i686-pc-windows-msvc/release/discord_extension.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;userenv.lib;ncrypt.lib;secur32.lib;ws2_32.lib;crypt32.lib;tier1.lib;tier0.lib;interfaces.lib;rust/target/i686-pc-windows-msvc/release/discord_extension.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\hl2sdk\lib\public;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cpp\DiscordClient.cpp" />
     <ClCompile Include="cpp\Extension.cpp" />
     <ClCompile Include="cpp\glue.cpp" />
     <ClCompile Include="cpp\include\smsdk_ext.cpp" />
-    <ClCompile Include="cpp\smn_client.cpp" />
     <ClCompile Include="cpp\smn_extension.cpp" />
     <ClCompile Include="cpp\smn_message.cpp" />
     <ClCompile Include="cpp\smn_newembed.cpp" />
