@@ -18,7 +18,7 @@ before_build:
   - cmd: cd ..
   - cmd: mkdir build
   - cmd: cd build
-  - cmd: cmake ..
+  - cmd: cmake -DCMAKE_BUILD_TYPE=Release -DSDK=tf2 ..
 
 after_build:
   - cmd: rename Release\discord.ext.dll discord.ext.2.tf2.dll
