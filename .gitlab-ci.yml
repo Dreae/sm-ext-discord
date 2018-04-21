@@ -5,6 +5,7 @@ variables:
 
 stages:
   - build
+  - bundle
 
 before_script:
 - dnf -y install gcc gcc-c++ ninja-build git
@@ -69,3 +70,12 @@ build:css:
     paths:
     - rust/target
     - ~/cargo/registry
+
+bundle:
+  stage: bundle
+  script:
+  - cd build
+  - mkdir -p extensions scripting
+  - cp *.so extensions/
+  - cp -R ../scripting/include scripting/
+  - tar -cf discord.tar.gz scripting/ extensions/
