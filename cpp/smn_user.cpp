@@ -43,6 +43,8 @@ static cell_t native_GetName(IPluginContext *pContext, const cell_t *params) {
     pContext->LocalToPhysAddr(params[2], &addr);
 
     user_get_username(user, reinterpret_cast<char *>(addr), params[3]);
+
+    return 1;
 }
 
 static cell_t native_GetTag(IPluginContext *pContext, const cell_t *params) {
@@ -52,6 +54,8 @@ static cell_t native_GetTag(IPluginContext *pContext, const cell_t *params) {
     pContext->LocalToPhysAddr(params[2], &addr);
 
     user_get_tag(user, reinterpret_cast<char *>(addr), params[3]);
+
+    return 1;
 }
 
 static cell_t native_HasRole(IPluginContext *pContext, const cell_t *params) {

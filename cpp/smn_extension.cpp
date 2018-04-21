@@ -70,6 +70,8 @@ static cell_t native_FetchUser(IPluginContext *pContext, const cell_t *params) {
     IdentityToken_t *ident = pContext->GetIdentity();
 
     get_user(user_id, callback, ident, params[3]);
+
+    return 1;
 }
 
 const sp_nativeinfo_t smdiscord_natives[] = {
