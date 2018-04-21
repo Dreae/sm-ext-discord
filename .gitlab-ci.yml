@@ -21,12 +21,50 @@ build:csgo:
   - cd ../
   - mkdir build
   - cd build
-  - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
+  - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDK=csgo ..
   - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_DIR=/usr ninja
   - mv discord.ext.so discord.ext.2.csgo.so
   artifacts:
     paths:
     - build/discord.ext.2.csgo.so
+  cache:
+    paths:
+    - rust/target
+    - ~/cargo/registry
+
+build:tf2:
+  stage: build
+  script:
+  - cd hl2sdk
+  - git checkout tf2
+  - cd ../
+  - mkdir build
+  - cd build
+  - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDK=tf2 ..
+  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_DIR=/usr ninja
+  - mv discord.ext.so discord.ext.2.tf2.so
+  artifacts:
+    paths:
+    - build/discord.ext.2.tf2.so
+  cache:
+    paths:
+    - rust/target
+    - ~/cargo/registry
+
+build:css:
+  stage: build
+  script:
+  - cd hl2sdk
+  - git checkout css
+  - cd ../
+  - mkdir build
+  - cd build
+  - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDK=css ..
+  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_DIR=/usr ninja
+  - mv discord.ext.so discord.ext.2.css.so
+  artifacts:
+    paths:
+    - build/discord.ext.2.css.so
   cache:
     paths:
     - rust/target
