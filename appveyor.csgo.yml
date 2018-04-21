@@ -19,7 +19,7 @@ before_build:
   - cmd: git checkout csgo
 
 after_build:
-  - cmd: ren Release\discord.ext.dll Release\discord.ext.2.csgo.dll
+  - cmd: rename Release\discord.ext.dll Release\discord.ext.2.csgo.dll
 
 build:
   project: SM-EXT-Discord.sln
