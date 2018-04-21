@@ -15,10 +15,10 @@ before_script:
 
 build:csgo:
   stage: build
-  before_script:
+  script:
   - cd hl2sdk
   - git checkout csgo
-  script:
+  - cd ../
   - mkdir build
   - cd build
   - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
