@@ -13,7 +13,7 @@ platform: x86
 configuration: Release
 
 before_build:
-  - cmd: cd ..\hl2sdk
+  - cmd: cd hl2sdk
   - cmd: git checkout csgo
   - cmd: cd ..
   - cmd: mkdir build
