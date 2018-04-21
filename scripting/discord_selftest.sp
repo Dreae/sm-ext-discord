@@ -30,6 +30,7 @@ public void OnDiscordMessage(DiscordMessage msg) {
 
     PrintToServer("Got message from %s (%d) (%d):  %s", sAuthorId, msg.IsSelf(), msg.IsBot(), content);
     PrintToServer("NumMentionedRoles: %d, NumMentionedUsers: %d, MentionsSelf: %d", msg.NumMentionedRoles(), msg.NumMentionedUsers(), msg.MentionsUser(g_iBotUserId));
+    Discord_FetchUser(authorId, On_GetUser, 1337);
 
     if (StrEqual("smtest", content)) {
         msg.ReplyToChannel("**test** *test* [test](https://google.com)");
@@ -51,6 +52,14 @@ public void OnDiscordMessage(DiscordMessage msg) {
 
         newMsg.SetEmbed(embed);
 
-        SendToChannel(channelId, newMsg);
+        Discord_SendToChannel(channelId, newMsg);
     }
+}
+
+public void On_GetUser(DiscordUser user, any data) {
+    char tag[128];
+    user.GetTag(tag, sizeof(tag));
+    PrintToServer("Got user info on %s: %d", tag, data);
+
+    user.Close();
 }

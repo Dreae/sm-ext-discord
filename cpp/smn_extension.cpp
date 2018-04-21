@@ -61,9 +61,21 @@ static cell_t native_SendToChannel(IPluginContext *pContext, const cell_t *param
     return 1;
 }
 
+static cell_t native_FetchUser(IPluginContext *pContext, const cell_t *params) {
+    cell_t *addr;
+    pContext->LocalToPhysAddr(params[1], &addr);
+    u64_t user_id = *reinterpret_cast<u64_t *>(addr);
+
+    IPluginFunction *callback = pContext->GetFunctionById(params[2]);
+    IdentityToken_t *ident = pContext->GetIdentity();
+
+    get_user(user_id, callback, ident, params[3]);
+}
+
 const sp_nativeinfo_t smdiscord_natives[] = {
     {"UInt64ToString", native_UInt64ToString},
     {"StringToUInt64", native_StringToUInt64},
-    {"SendToChannel", native_SendToChannel},
+    {"Discord_SendToChannel", native_SendToChannel},
+    {"Discord_FetchUser", native_FetchUser},
     {NULL, NULL}
 };

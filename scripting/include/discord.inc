@@ -108,6 +108,32 @@ methodmap DiscordReady < Handle {
     public native void CurrentUserId(int id[2]);
 }
 
+methodmap DiscordUser < Handle {
+    /**
+     * Retrieves the name for this user
+     *
+     * @param buffer        Buffer to store the name
+     * @param len           Maximum length of buffer
+     */
+    public native void GetName(char[] buffer, int len);
+
+    /**
+     * Retrieves the tag for this user
+     *
+     * @param buffer        Buffer to store the tag
+     * @param len           Maximum length of buffer
+     */
+    public native void GetTag(char[] buffer, int len);
+
+    /**
+     * Checks if this user has a given role in a given guild
+     *
+     * @param guildId       The GuildId to use when searching for roles
+     * @param roleId        The RoleId the user should have
+     */
+    public native bool HasRole(int guildId[2], int roleId[2]);
+}
+
 forward void OnDiscordMessage(DiscordMessage msg);
 forward void OnDiscordReady(DiscordReady ready);
 
@@ -184,6 +210,11 @@ methodmap NewDiscordMessage < Handle {
     public native void SetEmbed(NewDiscordEmbed embed);
 }
 
+typeset FetchUserCallback {
+    function void(DiscordUser user);
+    function void(DiscordUser user, any data);
+}
+
 /**
  * Converts a UInt64 to a string for easier storage
  *
@@ -208,7 +239,15 @@ native void StringToUInt64(const char[] buffer, int u64[2]);
  * @param channel_id        The ChannelId to send this message to
  * @param message           The message to send to the channel
  */
-native void SendToChannel(int channel_id[2], NewDiscordMessage message);
+native void Discord_SendToChannel(int channel_id[2], NewDiscordMessage message);
+
+/**
+ * Fetches information about a user by UserId
+ *
+ * @param userId            The UserId to lookup
+ * @param callback          The function to call with the retrieved data
+ */
+native void Discord_FetchUser(int userId[2], FetchUserCallback callback, any data = 0);
 
 public Extension:__ext_smdiscord = {
     name = "Discord",

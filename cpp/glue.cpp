@@ -25,6 +25,20 @@ void call_ready_callback(DiscordReady *ready) {
     g_ReadyForward->Execute();
 }
 
+void call_user_callback(DiscordUser *user, IPluginFunction *callback, IdentityToken_t *plugin, i32_t data) {
+    if (callback) {
+        HandleError err;
+        auto hndl = handlesys->CreateHandle(g_UserType, user, plugin, myself->GetIdentity(), &err);
+        if (!hndl) {
+            smutils->LogError(myself, "Got null handle, error code: %d", err);
+        }
+
+        callback->PushCell(hndl);
+        callback->PushCell(data);
+        callback->Execute(nullptr);
+    }
+}
+
 void log_error(char *msg) {
     smutils->LogError(myself, msg);
 }

@@ -1,4 +1,4 @@
-#![feature(conservative_impl_trait)]
+#![feature(libc)]
 
 #[macro_use]
 extern crate lazy_static;
@@ -6,6 +6,7 @@ extern crate lazy_static;
 extern crate serenity;
 extern crate typemap;
 extern crate rayon;
+extern crate libc;
 
 use std::os::raw::c_char;
 use std::ffi::CStr;
@@ -23,8 +24,10 @@ use handler::Handler;
 
 pub use model::c::*;
 
+pub mod utils;
+
 lazy_static! {
-    pub static ref MSG_POOL: ThreadPool = ThreadPoolBuilder::new().num_threads(2).build().unwrap();
+    pub static ref THREADPOOL: ThreadPool = ThreadPoolBuilder::new().num_threads(2).build().unwrap();
     pub static ref CONNECTED: AtomicBool = AtomicBool::new(false);
 }
 
@@ -56,7 +59,7 @@ pub extern "C" fn say_to_channel(channel_id: u64, msg: *const c_char) {
         let c_str = CStr::from_ptr(msg);
         if let Ok(msg) = c_str.to_str() {
             let channel_id = ChannelId(channel_id);
-            MSG_POOL.spawn(move || {
+            THREADPOOL.spawn(move || {
                 if let Err(err) = channel_id.say(msg) {
                     glue::log_error(&format!("There was an error sending message: {:?}", err));
                 }

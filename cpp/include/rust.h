@@ -2,11 +2,13 @@
 
 typedef unsigned long long int u64_t;
 typedef unsigned long int u32_t;
+typedef long int i32_t;
 typedef unsigned char bool_t;
 
 typedef void RustDiscordClient;
 typedef void NewDiscordMessage;
 typedef void NewDiscordEmbed;
+typedef void DiscordUser;
 
 extern "C" {
     typedef struct {
@@ -41,4 +43,10 @@ extern "C" {
     void new_embed_set_color(NewDiscordEmbed *new_embed, unsigned char r, unsigned char g, unsigned char b);
     void new_embed_set_footer_text(NewDiscordEmbed *new_embed, char *text);
     void new_embed_set_footer_icon(NewDiscordEmbed *new_embed, char *url);
+
+    DiscordUser *get_user(u64_t user_id, void *callback, void *plugin, i32_t data);
+    void free_user(DiscordUser *user);
+    void user_get_username(DiscordUser *user, char *buffer, size_t len);
+    void user_get_tag(DiscordUser *user, char *buffer, size_t len);
+    bool_t user_has_role(DiscordUser *user, u64_t guild_id, u64_t role_id);
 }

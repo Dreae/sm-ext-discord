@@ -8,6 +8,7 @@ set(SOURCE_FILES
     cpp/smn_newmessage.cpp
     cpp/smn_newembed.cpp
     cpp/smn_ready.cpp
+    cpp/smn_user.cpp
     cpp/include/smsdk_ext.cpp
     cpp/glue.cpp
 )
