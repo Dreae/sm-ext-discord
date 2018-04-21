@@ -17,9 +17,10 @@ before_build:
   - cmd: cargo build --release --target i686-pc-windows-msvc
   - cmd: cd ..\hl2sdk
   - cmd: git checkout csgo
+  - cmd: cd ..\
 
 after_build:
-  - cmd: rename Release\discord.ext.dll Release\discord.ext.2.csgo.dll
+  - cmd: rename Release\discord.ext.dll discord.ext.2.csgo.dll
 
 build:
   project: SM-EXT-Discord.sln
