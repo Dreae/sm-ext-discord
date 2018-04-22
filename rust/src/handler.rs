@@ -1,10 +1,9 @@
 use std::ffi::CString;
-use std::mem;
 
 use serenity::prelude::{EventHandler, Context};
 use serenity::model::channel::Message;
 use serenity::model::gateway::Ready;
-use serenity::model::id::{ChannelId, RoleId, UserId};
+use serenity::model::id::{ChannelId, RoleId, UserId, GuildId};
 use ::model::{DiscordMessage, DiscordReady};
 
 pub struct Handler;
@@ -18,9 +17,15 @@ impl Handler {
 impl EventHandler for Handler {
     fn message(&self, _ctx: Context, msg: Message) {
         let own = if msg.is_own() { 1 } else { 0 };
-        let content = CString::new(msg.content).unwrap();
         let ChannelId(channel_id) = msg.channel_id;
         let UserId(author_id) = msg.author.id;
+        let guild_id = if let Some(GuildId(id)) = msg.guild_id() {
+            id
+        } else {
+            0
+        };
+
+        let content = CString::new(msg.content).unwrap();
 
         let mentioned_roles: Vec<u64> = msg.mention_roles.into_iter().map(|role_id| {
             let RoleId(role) = role_id;
@@ -42,7 +47,8 @@ impl EventHandler for Handler {
             mentioned_roles: mentioned_roles.as_ptr(),
             num_mentioned_roles: mentioned_roles.len() as u32,
             mentioned_users: mentioned_users.as_ptr(),
-            num_mentioned_users: mentioned_users.len() as u32
+            num_mentioned_users: mentioned_users.len() as u32,
+            guild_id
         };
 
         ::glue::call_message_callback(Box::into_raw(author), &discord_message);

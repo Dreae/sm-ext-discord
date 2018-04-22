@@ -26,8 +26,18 @@ public void OnDiscordMessage(DiscordUser author, DiscordMessage msg) {
     msg.GetContent(content, sizeof(content));
     author.GetTag(authorTag, sizeof(authorTag));
 
+    int channelId[2];
+    int guildId[2];
+    msg.ChannelId(channelId);
+    msg.GuildId(guildId);
+    char sChannelId[24];
+    char sGuildId[24];
+    UInt64ToString(channelId, sChannelId);
+    UInt64ToString(guildId, sGuildId);
+
     PrintToServer("Got message from %s (%d) (%d):  %s", authorTag, msg.IsSelf(), msg.IsBot(), content);
     PrintToServer("NumMentionedRoles: %d, NumMentionedUsers: %d, MentionsSelf: %d", msg.NumMentionedRoles(), msg.NumMentionedUsers(), msg.MentionsUser(g_iBotUserId));
+    PrintToServer("ChannelId: %s, GuildId: %s", sChannelId, sGuildId);
 
     int authorId[2];
     msg.AuthorId(authorId);
@@ -38,9 +48,6 @@ public void OnDiscordMessage(DiscordUser author, DiscordMessage msg) {
     }
 
     if (StrEqual("embedtest", content)) {
-        int channelId[2];
-        msg.ChannelId(channelId);
-
         NewDiscordMessage newMsg = new NewDiscordMessage();
         NewDiscordEmbed embed = new NewDiscordEmbed();
 

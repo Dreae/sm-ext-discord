@@ -94,6 +94,16 @@ static cell_t native_ChannelId(IPluginContext *pContext, const cell_t *params) {
     return 1;
 }
 
+static cell_t native_GuildId(IPluginContext *pContext, const cell_t *params) {
+    DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
+
+    cell_t *addr;
+    pContext->LocalToPhysAddr(params[2], &addr);
+    *reinterpret_cast<u64_t *>(addr) = msg->guild_id;
+
+    return 1;
+}
+
 static cell_t native_MentionsRole(IPluginContext *pContext, const cell_t *params) {
     DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
@@ -177,6 +187,7 @@ const sp_nativeinfo_t discord_message_natives[] = {
     {"DiscordMessage.IsSelf", native_IsSelf},
     {"DiscordMessage.AuthorId", native_AuthorId},
     {"DiscordMessage.ChannelId", native_ChannelId},
+    {"DiscordMessage.GuildId", native_GuildId},
     {"DiscordMessage.MentionsRole", native_MentionsRole},
     {"DiscordMessage.NumMentionedRoles", native_NumMentionedRoles},
     {"DiscordMessage.GetMentionedRole", native_GetMentionedRole},

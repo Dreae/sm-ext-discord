@@ -51,6 +51,15 @@ methodmap DiscordMessage < Handle {
     public native void ChannelId(int id[2]);
 
     /**
+     * Retrieves the GuildId this message was received from
+     * @note This returns 0 if the message was not sent to a
+     *       guild channel
+     *
+     * @param id            The buffer to store the GuildId
+     */
+    public native void GuildId(int id[2]);
+
+    /**
      * Determines if the supplied RoleId is mentioned in the
      * content of this message
      *

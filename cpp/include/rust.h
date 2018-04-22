@@ -21,6 +21,7 @@ extern "C" {
         u32_t num_mentioned_roles;
         u64_t *mentioned_users;
         u32_t num_mentioned_users;
+        u64_t guild_id;
     } DiscordMessage;
 
     typedef struct {

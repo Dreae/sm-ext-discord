@@ -10,5 +10,6 @@ pub struct DiscordMessage {
     pub mentioned_roles: *const u64,
     pub num_mentioned_roles: u32,
     pub mentioned_users: *const u64,
-    pub num_mentioned_users: u32
+    pub num_mentioned_users: u32,
+    pub guild_id: u64
 }
