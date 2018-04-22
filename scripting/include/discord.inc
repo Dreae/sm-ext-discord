@@ -134,7 +134,7 @@ methodmap DiscordUser < Handle {
     public native bool HasRole(int guildId[2], int roleId[2]);
 }
 
-forward void OnDiscordMessage(DiscordMessage msg);
+forward void OnDiscordMessage(DiscordUser author, DiscordMessage msg);
 forward void OnDiscordReady(DiscordReady ready);
 
 methodmap NewDiscordEmbed < Handle {

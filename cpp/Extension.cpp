@@ -24,8 +24,8 @@ bool Extension::SDK_OnMetamodLoad(ISmmAPI *ismm, char *error, size_t maxlen, boo
 }
 
 bool Extension::SDK_OnLoad(char *error, size_t err_max, bool late) {
-    ParamType types[] = {Param_Cell};
-    g_MessageForward = forwards->CreateForward("OnDiscordMessage", ET_Ignore, 1, types);
+    ParamType types[] = {Param_Cell, Param_Cell};
+    g_MessageForward = forwards->CreateForward("OnDiscordMessage", ET_Ignore, 2, types);
     g_ReadyForward = forwards->CreateForward("OnDiscordReady", ET_Ignore, 1, types);
 
     auto head = BaseClass::head;

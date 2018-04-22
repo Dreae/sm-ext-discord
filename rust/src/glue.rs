@@ -3,9 +3,9 @@ use std::ffi::CString;
 use serenity::model::user::User;
 use std::os::raw::c_void;
 
-pub fn call_message_callback(msg: &DiscordMessage) {
+pub fn call_message_callback(author: *mut User, msg: &DiscordMessage) {
     unsafe {
-        c::call_message_callback(msg as *const DiscordMessage);
+        c::call_message_callback(author as *const c_void, msg as *const DiscordMessage);
     }
 }
 
@@ -40,7 +40,7 @@ mod c {
     use ::model::{DiscordMessage, DiscordReady};
 
     extern "C" {
-        pub fn call_message_callback(msg: *const DiscordMessage);
+        pub fn call_message_callback(user: *const c_void, msg: *const DiscordMessage);
         pub fn call_ready_callback(ready: *const DiscordReady);
         pub fn call_user_callback(user: *mut c_void, callback: *const c_void, plugin: *const c_void, data: i32);
         pub fn log_error(msg: *const c_char);

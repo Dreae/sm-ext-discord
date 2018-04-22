@@ -19,17 +19,18 @@ public void OnDiscordReady(DiscordReady ready) {
     PrintToServer("Bot user is %s", buffer);
 }
 
-public void OnDiscordMessage(DiscordMessage msg) {
+public void OnDiscordMessage(DiscordUser author, DiscordMessage msg) {
     char content[256];
-    int authorId[2];
-    char sAuthorId[24];
+    char authorTag[128];
 
     msg.GetContent(content, sizeof(content));
-    msg.AuthorId(authorId);
-    UInt64ToString(authorId, sAuthorId);
+    author.GetTag(authorTag, sizeof(authorTag));
 
-    PrintToServer("Got message from %s (%d) (%d):  %s", sAuthorId, msg.IsSelf(), msg.IsBot(), content);
+    PrintToServer("Got message from %s (%d) (%d):  %s", authorTag, msg.IsSelf(), msg.IsBot(), content);
     PrintToServer("NumMentionedRoles: %d, NumMentionedUsers: %d, MentionsSelf: %d", msg.NumMentionedRoles(), msg.NumMentionedUsers(), msg.MentionsUser(g_iBotUserId));
+
+    int authorId[2];
+    msg.AuthorId(authorId);
     Discord_FetchUser(authorId, On_GetUser, 1337);
 
     if (StrEqual("smtest", content)) {

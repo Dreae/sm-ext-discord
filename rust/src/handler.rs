@@ -1,4 +1,5 @@
 use std::ffi::CString;
+use std::mem;
 
 use serenity::prelude::{EventHandler, Context};
 use serenity::model::channel::Message;
@@ -30,11 +31,13 @@ impl EventHandler for Handler {
             user_id
         }).collect();
 
+        let author = Box::new(msg.author);
+
         let discord_message = DiscordMessage {
             content: content.as_ptr(),
             channel_id,
             author_id,
-            bot: if msg.author.bot { 1 } else { 0 },
+            bot: if author.bot { 1 } else { 0 },
             own,
             mentioned_roles: mentioned_roles.as_ptr(),
             num_mentioned_roles: mentioned_roles.len() as u32,
@@ -42,7 +45,7 @@ impl EventHandler for Handler {
             num_mentioned_users: mentioned_users.len() as u32
         };
 
-        ::glue::call_message_callback(&discord_message);
+        ::glue::call_message_callback(Box::into_raw(author), &discord_message);
     }
 
     fn ready(&self, _ctx: Context, ready: Ready) {
