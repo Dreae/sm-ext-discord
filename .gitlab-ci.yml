@@ -23,7 +23,7 @@ build:csgo:
   - mkdir build
   - cd build
   - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDK=csgo ..
-  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_DIR=/usr ninja
+  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_STATIC=yes OPENSSL_LIB_DIR=/lib OPENSSL_INCLUDE_DIR=/usr/include ninja
   - mv discord.ext.so discord.ext.2.csgo.so
   artifacts:
     paths:
@@ -42,7 +42,7 @@ build:tf2:
   - mkdir build
   - cd build
   - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDK=tf2 ..
-  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_DIR=/usr ninja
+  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_STATIC=yes OPENSSL_LIB_DIR=/lib OPENSSL_INCLUDE_DIR=/usr/include ninja
   - mv discord.ext.so discord.ext.2.tf2.so
   artifacts:
     paths:
@@ -61,7 +61,7 @@ build:css:
   - mkdir build
   - cd build
   - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDK=css ..
-  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_DIR=/usr ninja
+  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_STATIC=yes OPENSSL_LIB_DIR=/lib OPENSSL_INCLUDE_DIR=/usr/include ninja
   - mv discord.ext.so discord.ext.2.css.so
   artifacts:
     paths:
@@ -80,7 +80,7 @@ build:insurgency:
   - mkdir build
   - cd build
   - cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDK=insurgency ..
-  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_DIR=/usr ninja
+  - PKG_CONFIG_ALLOW_CROSS=1 OPENSSL_STATIC=yes OPENSSL_LIB_DIR=/lib OPENSSL_INCLUDE_DIR=/usr/include ninja
   - mv discord.ext.so discord.ext.2.insurgency.so
   artifacts:
     paths:
