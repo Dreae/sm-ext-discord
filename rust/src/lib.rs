@@ -8,6 +8,9 @@ extern crate typemap;
 extern crate rayon;
 extern crate libc;
 
+#[cfg(not(windows))]
+extern crate openssl_probe;
+
 use std::os::raw::c_char;
 use std::ffi::CStr;
 use std::sync::atomic::{AtomicBool, Ordering};
@@ -34,6 +37,9 @@ lazy_static! {
 #[no_mangle]
 pub extern "C" fn start_discord_client(token: *const c_char) {
     if !CONNECTED.load(Ordering::Acquire) {
+        #[cfg(not(windows))]
+        openssl_probe::init_ssl_cert_env_vars();
+
         let handler = Handler::new();
         let c_str = unsafe { CStr::from_ptr(token).to_owned() };
          match c_str.to_str() {
