@@ -1,0 +1,94 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "/usr/include/c++/7",
+                "/usr/include/c++/7/x86_64-redhat-linux",
+                "/usr/include/c++/7/backward",
+                "/usr/local/include",
+                "/usr/lib64/clang/5.0.1/include",
+                "/usr/include",
+                "${workspaceFolder}/cpp",
+                "${workspaceFolder}/sourcemod/public",
+                "${workspaceFolder}/sourcemod/public/amtl",
+                "${workspaceFolder}/sourcemod/public/amtl/amtl",
+                "${workspaceFolder}/sourcemod/sourcepawn/include",
+                "${workspaceFolder}/metamod-source/core",
+                "${workspaceFolder}/metamod-source/core/sourcehook",
+                "${workspaceFolder}/hl2sdk/game/shared",
+                "${workspaceFolder}/hl2sdk/public/vstdlib",
+                "${workspaceFolder}/hl2sdk/public/tier1",
+                "${workspaceFolder}/hl2sdk/public/tier0",
+                "${workspaceFolder}/hl2sdk/public/engine",
+                "${workspaceFolder}/hl2sdk/public",
+                "${workspaceFolder}/hl2sdk/dlls"
+            ],
+            "defines": [
+                "POSIX",
+                "SOURCEMOD_BUILD",
+                "SMEXT_CONF_METAMOD",
+                "_LINUX",
+                "COMPILER_GCC"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/cpp",
+                    "/usr/include/c++/7",
+                    "/usr/include/c++/7/x86_64-redhat-linux",
+                    "/usr/include/c++/7/backward",
+                    "/usr/local/include",
+                    "/usr/lib64/clang/5.0.1/include",
+                    "/usr/include"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++14"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include",
+                "${workspaceFolder}/cpp",
+                "${workspaceFolder}/sourcemod/public",
+                "${workspaceFolder}/sourcemod/public/amtl",
+                "${workspaceFolder}/sourcemod/public/amtl/amtl",
+                "${workspaceFolder}/sourcemod/sourcepawn/include",
+                "${workspaceFolder}/metamod-source/core",
+                "${workspaceFolder}/metamod-source/core/sourcehook",
+                "${workspaceFolder}/hl2sdk/game/shared",
+                "${workspaceFolder}/hl2sdk/public/vstdlib",
+                "${workspaceFolder}/hl2sdk/public/tier1",
+                "${workspaceFolder}/hl2sdk/public/tier0",
+                "${workspaceFolder}/hl2sdk/public/engine",
+                "${workspaceFolder}/hl2sdk/public",
+                "${workspaceFolder}/hl2sdk/dlls"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "SOURCEMOD_BUILD",
+                "SMEXT_CONF_METAMOD",
+                "WIN32",
+                "_WINDOWS",
+                "COMPILER_MSVC",
+                "COMPILER_MSVC32"
+            ],
+            "intelliSenseMode": "msvc-x64",
+            "browse": {
+                "path": [
+                    "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 3
+}
