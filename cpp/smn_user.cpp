@@ -25,7 +25,7 @@ public:
     }
 
     void OnHandleDestroy(HandleType_t type, void *object) {
-        free_user(object);
+        free_discord_user(object);
     }
 
     // Not even going to try to estimate the size of the underlying Rust object

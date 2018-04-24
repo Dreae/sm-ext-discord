@@ -5,32 +5,35 @@ typedef unsigned long int u32_t;
 typedef long int i32_t;
 typedef unsigned char bool_t;
 
-typedef void RustDiscordClient;
 typedef void NewDiscordMessage;
 typedef void NewDiscordEmbed;
 typedef void DiscordUser;
+typedef void DiscordReady;
+typedef void DiscordMessage;
 
 extern "C" {
-    typedef struct {
-        char *content;
-        u64_t channel_id;
-        u64_t author_id;
-        bool_t bot;
-        bool_t own;
-        u64_t *mentioned_roles;
-        u32_t num_mentioned_roles;
-        u64_t *mentioned_users;
-        u32_t num_mentioned_users;
-        u64_t guild_id;
-    } DiscordMessage;
-
-    typedef struct {
-        u64_t user_id;
-    } DiscordReady;
-
     void start_discord_client(const char *token);
 
     void say_to_channel(u64_t channel_id, char *content);
+
+    void free_discord_message(DiscordMessage *msg);
+    void free_discord_user(DiscordUser *user);
+    void free_discord_ready(DiscordReady *ready);
+
+    void get_message_content(DiscordMessage *msg, char* buffer, size_t len);
+    u64_t get_message_channel_id(DiscordMessage *msg);
+    u64_t get_message_author_id(DiscordMessage *msg);
+    u64_t get_message_guild_id(DiscordMessage *msg);
+    bool_t get_message_is_self(DiscordMessage *msg);
+    bool_t get_message_is_bot(DiscordMessage *msg);
+    bool_t get_message_mentions_role(DiscordMessage *msg, u64_t role_id);
+    u32_t get_message_num_mentioned_roles(DiscordMessage *msg);
+    u64_t get_message_mentioned_role(DiscordMessage *msg, u32_t which);
+    bool_t get_message_mentions_user(DiscordMessage *msg, u64_t role_id);
+    u32_t get_message_num_mentioned_users(DiscordMessage *msg);
+    u64_t get_message_mentioned_user(DiscordMessage *msg, u32_t which);
+
+    u64_t get_ready_user_id(DiscordReady *ready);
 
     NewDiscordMessage *create_new_discord_message();
     void set_new_message_content(NewDiscordMessage *new_message, char *content);
@@ -46,7 +49,6 @@ extern "C" {
     void new_embed_set_footer_icon(NewDiscordEmbed *new_embed, char *url);
 
     DiscordUser *get_user(u64_t user_id, void *callback, void *plugin, i32_t data);
-    void free_user(DiscordUser *user);
     void user_get_username(DiscordUser *user, char *buffer, size_t len);
     void user_get_tag(DiscordUser *user, char *buffer, size_t len);
     bool_t user_has_role(DiscordUser *user, u64_t guild_id, u64_t role_id);

@@ -25,7 +25,7 @@ public:
     }
 
     void OnHandleDestroy(HandleType_t type, void *object) {
-        return;
+        free_discord_ready(object);
     }
 
     // Not even going to try to estimate the size of the underlying Rust object
@@ -41,7 +41,7 @@ static cell_t native_CurrentUserId(IPluginContext *pContext, const cell_t *param
 
     cell_t *addr;
     pContext->LocalToPhysAddr(params[2], &addr);
-    *reinterpret_cast<u64_t *>(addr) = ready->user_id;
+    *reinterpret_cast<u64_t *>(addr) = get_ready_user_id(ready);
 
     return 1;
 }

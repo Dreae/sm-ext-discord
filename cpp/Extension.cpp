@@ -34,11 +34,13 @@ bool Extension::SDK_OnLoad(char *error, size_t err_max, bool late) {
         head = head->next;
     }
 
+    smutils->AddGameFrameHook(On_GameFrame);
+
     return true;
 }
 
 void Extension::SDK_OnUnload() {
-
+    smutils->RemoveGameFrameHook(On_GameFrame);
 }
 
 void Extension::OnCoreMapStart(edict_t *pEdictList, int edictCount, int clientMax) {

@@ -3,6 +3,7 @@
 #include "include/smsdk_ext.h"
 #include "include/rust.h"
 #include <convar.h>
+#include "work_queue.hpp"
 
 #define LOG_MESSAGE(format, ...) \
   smutils->LogMessage(myself, format, ##__VA_ARGS__);

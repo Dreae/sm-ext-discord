@@ -13,6 +13,7 @@ set(SOURCE_FILES
     cpp/smn_newembed.cpp
     cpp/smn_ready.cpp
     cpp/smn_user.cpp
+    cpp/work_queue.cpp
     cpp/include/smsdk_ext.cpp
     cpp/glue.cpp
 )

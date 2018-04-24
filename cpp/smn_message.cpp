@@ -25,7 +25,7 @@ public:
     }
 
     void OnHandleDestroy(HandleType_t type, void *object) {
-        return;
+        free_discord_message(object);
     }
 
     // Not even going to try to estimate the size of the underlying Rust object
@@ -39,7 +39,10 @@ DiscordMessageNatives messageNatives;
 static cell_t native_GetMessageContent(IPluginContext *pContext, const cell_t *params) {
     DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
-    pContext->StringToLocal(params[2], params[3], msg->content);
+    cell_t *addr;
+    pContext->LocalToPhysAddr(params[2], &addr);
+
+    get_message_content(msg, reinterpret_cast<char *>(addr), params[3]);
 
     return 1;
 }
@@ -57,7 +60,7 @@ static cell_t native_ReplyToChannel(IPluginContext *pContext, const cell_t *para
         msg_content[len] = '\0';
     }
 
-    say_to_channel(msg->channel_id, msg_content);
+    say_to_channel(get_message_channel_id(msg), msg_content);
 
     return 1;
 }
@@ -65,13 +68,13 @@ static cell_t native_ReplyToChannel(IPluginContext *pContext, const cell_t *para
 static cell_t native_IsBot(IPluginContext *pContext, const cell_t *params) {
     DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
-    return msg->bot;
+    return get_message_is_bot(msg);
 }
 
 static cell_t native_IsSelf(IPluginContext *pContext, const cell_t *params) {
     DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
-    return msg->own;
+    return get_message_is_self(msg);
 }
 
 static cell_t native_AuthorId(IPluginContext *pContext, const cell_t *params) {
@@ -79,7 +82,7 @@ static cell_t native_AuthorId(IPluginContext *pContext, const cell_t *params) {
 
     cell_t *addr;
     pContext->LocalToPhysAddr(params[2], &addr);
-    *reinterpret_cast<u64_t *>(addr) = msg->author_id;
+    *reinterpret_cast<u64_t *>(addr) = get_message_author_id(msg);
 
     return 1;
 }
@@ -89,7 +92,7 @@ static cell_t native_ChannelId(IPluginContext *pContext, const cell_t *params) {
 
     cell_t *addr;
     pContext->LocalToPhysAddr(params[2], &addr);
-    *reinterpret_cast<u64_t *>(addr) = msg->channel_id;
+    *reinterpret_cast<u64_t *>(addr) = get_message_channel_id(msg);
 
     return 1;
 }
@@ -99,7 +102,7 @@ static cell_t native_GuildId(IPluginContext *pContext, const cell_t *params) {
 
     cell_t *addr;
     pContext->LocalToPhysAddr(params[2], &addr);
-    *reinterpret_cast<u64_t *>(addr) = msg->guild_id;
+    *reinterpret_cast<u64_t *>(addr) = get_message_guild_id(msg);
 
     return 1;
 }
@@ -111,33 +114,27 @@ static cell_t native_MentionsRole(IPluginContext *pContext, const cell_t *params
     pContext->LocalToPhysAddr(params[2], &addr);
     u64_t id = *reinterpret_cast<u64_t *>(addr);
 
-    for (u32_t c = 0; c < msg->num_mentioned_roles; c++) {
-        if (msg->mentioned_roles[c] == id) {
-            return 1;
-        }
-    }
-
-    return 0;
+    return get_message_mentions_role(msg, id);
 }
 
 static cell_t native_NumMentionedRoles(IPluginContext *pContext, const cell_t *params) {
     DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
-    return msg->num_mentioned_roles;
+    return get_message_num_mentioned_roles(msg);
 }
 
 static cell_t native_GetMentionedRole(IPluginContext *pContext, const cell_t *params) {
     DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
     cell_t which = params[2];
-    if (which >= msg->num_mentioned_roles) {
+    if (which >= get_message_num_mentioned_roles(msg)) {
         pContext->ReportError("Index out of bounds: %d", which);
         return 0;
     }
 
     cell_t *addr;
     pContext->LocalToPhysAddr(params[3], &addr);
-    *reinterpret_cast<u64_t *>(addr) = msg->mentioned_roles[which];
+    *reinterpret_cast<u64_t *>(addr) = get_message_mentioned_role(msg, which);
 
     return 1;
 }
@@ -149,33 +146,27 @@ static cell_t native_MentionsUser(IPluginContext *pContext, const cell_t *params
     pContext->LocalToPhysAddr(params[2], &addr);
     u64_t id = *reinterpret_cast<u64_t *>(addr);
 
-    for (u32_t c = 0; c < msg->num_mentioned_users; c++) {
-        if (msg->mentioned_users[c] == id) {
-            return 1;
-        }
-    }
-
-    return 0;
+    return get_message_mentions_user(msg, id);
 }
 
 static cell_t native_NumMentionedUsers(IPluginContext *pContext, const cell_t *params) {
     DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
-    return msg->num_mentioned_users;
+    return get_message_num_mentioned_users(msg);
 }
 
 static cell_t native_GetMentionedUser(IPluginContext *pContext, const cell_t *params) {
     DiscordMessage *msg = ReadHandle<DiscordMessage>(pContext, params[1], g_MessageType);
 
     cell_t which = params[2];
-    if (which >= msg->num_mentioned_users) {
+    if (which >= get_message_num_mentioned_users(msg)) {
         pContext->ReportError("Index out of bounds: %d", which);
         return 0;
     }
 
     cell_t *addr;
     pContext->LocalToPhysAddr(params[3], &addr);
-    *reinterpret_cast<u64_t *>(addr) = msg->mentioned_users[which];
+    *reinterpret_cast<u64_t *>(addr) = get_message_mentioned_user(msg, which);
 
     return 1;
 }

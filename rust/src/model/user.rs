@@ -17,9 +17,7 @@ pub mod c {
 
         THREADPOOL.spawn(move || {
             if let Ok(user) = user_id.get() {
-                let user = Box::into_raw(Box::new(user));
-
-                ::glue::call_user_callback(user, callback, plugin, data);
+                ::glue::call_user_callback(Box::new(user), callback, plugin, data);
             } else {
                 ::glue::log_error("Error getting user from Discord API")
             }
@@ -27,7 +25,7 @@ pub mod c {
     }
 
     #[no_mangle]
-    pub extern "C" fn free_user(user: *mut User) {
+    pub extern "C" fn free_discord_user(user: *mut User) {
         unsafe {
             Box::from_raw(user);
         }
