@@ -2,11 +2,15 @@
 
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate serde_derive;
 
 extern crate serenity;
 extern crate typemap;
 extern crate rayon;
 extern crate libc;
+extern crate serde;
+extern crate serde_json;
 
 #[cfg(not(windows))]
 extern crate openssl_probe;
@@ -21,9 +25,14 @@ mod glue;
 mod client;
 
 use serenity::model::id::ChannelId;
+use serenity::http;
+
+use serde_json::Value;
+
 use rayon::{ThreadPool, ThreadPoolBuilder};
 use client::DiscordClient;
 use handler::Handler;
+use model::SendableDiscordMessage;
 
 pub use model::c::*;
 
@@ -70,6 +79,23 @@ pub extern "C" fn say_to_channel(channel_id: u64, msg: *const c_char) {
                     glue::log_error(&format!("There was an error sending message: {:?}", err));
                 }
             });
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn execute_webhook(webhook_id: u64, token: *const c_char, message: *mut SendableDiscordMessage) {
+    unsafe {
+        let msg = Box::from_raw(message);
+        let c_str = CStr::from_ptr(token);
+        if let Ok(token) = c_str.to_str() {
+            if let Ok(Value::Object(map)) = serde_json::to_value(msg) {
+                THREADPOOL.spawn(move || {
+                    if let Err(err) = http::execute_webhook(webhook_id, token, false, &map) {
+                        glue::log_error(&format!("There was an error executing a webhook: {:?}", err));
+                    }
+                });
+            }
         }
     }
 }

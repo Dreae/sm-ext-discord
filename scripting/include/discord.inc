@@ -217,6 +217,11 @@ methodmap NewDiscordMessage < Handle {
      * @param embed         The embeds to include in this message
      */
     public native void SetEmbed(NewDiscordEmbed embed);
+
+    /**
+     * Cancels sending a new message and closes this handle
+     */
+    public native void Cancel();
 }
 
 typeset FetchUserCallback {

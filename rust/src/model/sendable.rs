@@ -2,13 +2,13 @@ use serenity::model::id::ChannelId;
 
 use ::THREADPOOL;
 
-#[derive(Default)]
+#[derive(Default, Serialize, Deserialize)]
 pub struct SendableDiscordMessage {
     pub content: Option<String>,
     pub embed: Option<SendableDiscordEmbed>
 }
 
-#[derive(Default)]
+#[derive(Default, Serialize, Deserialize)]
 pub struct SendableDiscordEmbed {
     pub description: Option<String>,
     pub title: Option<String>,
@@ -109,6 +109,13 @@ pub mod c {
         THREADPOOL.spawn(move || {
             new_message.send(ChannelId(channel_id));
         });
+    }
+
+    #[no_mangle]
+    pub extern "C" fn free_new_message(new_message: *mut SendableDiscordMessage) {
+        unsafe {
+            Box::from_raw(new_message);
+        }
     }
 
     #[no_mangle]

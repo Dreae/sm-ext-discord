@@ -2,7 +2,7 @@
 #include "handletypes.hpp"
 
 std::mutex g_callback_mutex;
-std::queue<CallbackItem *> callback_queue;
+std::queue<std::unique_ptr<CallbackItem>> callback_queue;
 
 void MessageCallback::Execute() {
     HandleError err;
@@ -55,20 +55,20 @@ void UserCallback::Execute() {
 }
 
 void On_GameFrame(bool simulating) {
-    std::lock_guard<std::mutex> guard(g_callback_mutex);
-    if (!callback_queue.empty()) {
-        while (!callback_queue.empty()) {
-            auto callback = callback_queue.front();
+    if (g_callback_mutex.try_lock()) {
+        std::lock_guard<std::mutex> guard(g_callback_mutex, std::adopt_lock);
+        if (!callback_queue.empty()) {
+            while (!callback_queue.empty()) {
+                auto callback = std::move(callback_queue.front());
+                callback_queue.pop();
 
-            callback->Execute();
-            delete callback;
-
-            callback_queue.pop();
+                callback->Execute();
+            }
         }
     }
 }
 
-void AddCallback(CallbackItem *item) {
+void AddCallback(std::unique_ptr<CallbackItem> item) {
     std::lock_guard<std::mutex> guard(g_callback_mutex);
-    callback_queue.push(item);
+    callback_queue.push(std::move(item));
 }

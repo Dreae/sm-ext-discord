@@ -3,15 +3,15 @@
 #include "work_queue.hpp"
 
 void call_message_callback(DiscordUser *author, DiscordMessage *msg) {
-    AddCallback(new MessageCallback(author, msg));
+    AddCallback(std::unique_ptr<CallbackItem>(new MessageCallback(author, msg)));
 }
 
 void call_ready_callback(DiscordReady *ready) {
-    AddCallback(new ReadyCallback(ready));
+    AddCallback(std::unique_ptr<CallbackItem>(new ReadyCallback(ready)));
 }
 
 void call_user_callback(DiscordUser *user, IPluginFunction *callback, IdentityToken_t *plugin, i32_t data) {
-    AddCallback(new UserCallback(user, callback, plugin, data));
+    AddCallback(std::unique_ptr<CallbackItem>(new UserCallback(user, callback, plugin, data)));
 }
 
 void log_error(char *msg) {

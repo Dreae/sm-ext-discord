@@ -3,6 +3,7 @@
 #include <thread>
 #include <mutex>
 #include <queue>
+#include <memory>
 #include "Extension.hpp"
 #include "include/rust.h"
 
@@ -45,6 +46,6 @@ public:
 };
 
 extern std::mutex g_callback_mutex;
-extern std::queue<CallbackItem *> callback_queue;
+extern std::queue<std::unique_ptr<CallbackItem>> callback_queue;
 extern void On_GameFrame(bool simulating);
-extern void AddCallback(CallbackItem *item);
+extern void AddCallback(std::unique_ptr<CallbackItem> item);

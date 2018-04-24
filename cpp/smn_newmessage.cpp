@@ -79,9 +79,23 @@ static cell_t native_SetNewMessageEmbed(IPluginContext *pContext, const cell_t *
     return 1;
 }
 
+static cell_t native_CancelNewMessage(IPluginContext *pContext, const cell_t *params) {
+    auto new_message = ReadHandle<NewDiscordMessage>(pContext, params[1], g_NewMessageType);
+
+    free_new_message(new_message);
+
+    HandleSecurity sec;
+    sec.pOwner = pContext->GetIdentity();
+    sec.pIdentity = myself->GetIdentity();
+    handlesys->FreeHandle(static_cast<Handle_t>(params[1]), &sec);
+
+    return 1;
+}
+
 const sp_nativeinfo_t newmessage_natives[] = {
     {"NewDiscordMessage.NewDiscordMessage", native_CreateNewDiscordMessage},
     {"NewDiscordMessage.SetContent", native_SetNewMessageContent},
     {"NewDiscordMessage.SetEmbed", native_SetNewMessageEmbed},
+    {"NewDiscordMessage.Cancel", native_CancelNewMessage},
     {NULL, NULL}
 };

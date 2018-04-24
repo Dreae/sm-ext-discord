@@ -19,6 +19,7 @@ extern "C" {
     void free_discord_message(DiscordMessage *msg);
     void free_discord_user(DiscordUser *user);
     void free_discord_ready(DiscordReady *ready);
+    void free_new_message(NewDiscordMessage *new_message);
 
     void get_message_content(DiscordMessage *msg, char* buffer, size_t len);
     u64_t get_message_channel_id(DiscordMessage *msg);
@@ -52,4 +53,6 @@ extern "C" {
     void user_get_username(DiscordUser *user, char *buffer, size_t len);
     void user_get_tag(DiscordUser *user, char *buffer, size_t len);
     bool_t user_has_role(DiscordUser *user, u64_t guild_id, u64_t role_id);
+
+    void execute_webhook(u64_t webhook_id, const char *webhook_token, NewDiscordMessage *message);
 }
