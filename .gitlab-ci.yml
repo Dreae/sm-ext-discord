@@ -95,11 +95,9 @@ bundle:
   before_script:
   - echo noop
   script:
-  - cd build
-  - mkdir -p extensions scripting
-  - cp *.so extensions/
-  - cp -R ../scripting/include scripting/
-  - tar -cf discord.tar.gz scripting/ extensions/
+  - mkdir -p extensions
+  - cp build/*.so extensions/
   artifacts:
     paths:
-    - build/discord.tar.gz
+    - extensions/
+    - scripting/
